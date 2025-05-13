@@ -1,49 +1,43 @@
-# Progresso do Projeto
+# Registro de Progresso
+
+## Visão Geral do Progresso
+- [x] Inicialização do Memory Bank (data: atual)
+- [x] Análise completa da estrutura do projeto
+- [ ] Implementação de funcionalidade de tema claro/escuro
+- [ ] Implementação de componentes básicos de UI
+- [ ] Implementação de funcionalidade de adição de tarefas
+- [ ] Implementação de funcionalidade de marcação como concluída
+- [ ] Implementação de funcionalidade de edição de tarefas
+- [ ] Implementação de funcionalidade de exclusão de tarefas
+- [ ] Implementação de filtros de visualização
+- [ ] Implementação de persistência local
+- [ ] Testes de componentes
+- [ ] Otimizações de desempenho
+- [ ] Melhorias de acessibilidade
+- [ ] Versão final para produção
 
 ## Marcos Concluídos
+| Data       | Marcos                     | Detalhes                                            |
+|------------|----------------------------|-----------------------------------------------------|
+| Data atual | Inicialização do projeto   | Configuração do Memory Bank e análise inicial       |
+| Data atual | Planejamento de tema       | Plano detalhado para implementação de tema claro/escuro |
 
-### Configuração Inicial (Data: Anterior)
-- ✅ Projeto inicializado com Vite, React, TypeScript
-- ✅ Configuração do Tailwind CSS
-- ✅ Configuração do ESLint
-- ✅ Estrutura básica do projeto estabelecida
-- ✅ Sistema de memória do Agente criado
+## Funcionalidades Implementadas
+Nenhuma funcionalidade totalmente implementada ainda.
 
-### Planejamento (Data: Anterior)
-- ✅ Plano detalhado para transformação em Todo App com whiteboard
-- ✅ Definição da estratégia GitFlow
-- ✅ Criação do board.md com tarefas detalhadas
-- ✅ Atualização da memória do agente com o novo contexto
+## Funcionalidades em Desenvolvimento
+- **Tema Claro/Escuro**: Planejamento completo para implementação de alternância de temas, incluindo persistência das preferências do usuário.
 
-### Configuração do Ambiente (Data: Atual)
-- ✅ Inicialização do repositório Git e criação dos branches GitFlow
-- ✅ Instalação e configuração de shadcn/ui e seus componentes
-- ✅ Instalação e configuração do Zustand para gerenciamento de estado
-- ✅ Configuração do Tailwind CSS para suportar o tema e cores pastéis
-- ✅ Criação da estrutura de diretórios e organização de arquivos
-- ✅ Implementação de funções utilitárias (geração de IDs, cores pastéis)
-- ✅ Definição de interfaces e tipos para o modelo de dados
-
-## Em Andamento
-- 🔄 Preparação para implementação da Tarefa 2: Modelo de Dados e Estado
+## Desafios Encontrados
+Nenhum desafio significativo encontrado ainda.
 
 ## Próximos Marcos
-- ⏱️ Tarefa 2: Modelo de Dados e Estado
-- ⏱️ Tarefa 3: Componente Whiteboard
-- ⏱️ Tarefa 4: Componente TodoItem
-- ⏱️ Tarefa 5: Barra de Ferramentas
-- ⏱️ Tarefa 6: Integração e Responsividade
-- ⏱️ Tarefa 7: Testes e Otimização
-- ⏱️ Tarefa 8: Documentação e Release
-
-## Desafios e Soluções
-- Transformação de uma aplicação TODO tradicional para um whiteboard interativo: Solução planejada com sistema de posicionamento livre e cores pastéis
-- Integração de novos frameworks (shadcn/ui, Zustand): Implementados componentes básicos e store inicial com configurações personalizadas
-- Configuração do ambiente de desenvolvimento: Uso de path aliases e estrutura de diretórios modular para facilitar o desenvolvimento
-
-## Decisões Importantes
-- Uso de shadcn/ui para componentes da interface: Implementação limpa e estilização com Tailwind CSS
-- Adoção do Zustand para gerenciamento de estado: Store criado com funções básicas e persistência
-- Implementação de whiteboard com posicionamento livre: Estrutura CSS básica já definida
-- Estratégia GitFlow para controle de versão: Branches develop e feature criados, seguindo padrões
-- Definição de cores pastéis: Função para geração aleatória implementada 
+| Prioridade | Marco                              | Estimativa de Conclusão |
+|------------|------------------------------------|-----------------------|
+| Alta       | Implementação de tema claro/escuro | Em planejamento       |
+| Alta       | Estrutura básica do aplicativo     | Pendente              |
+| Alta       | Componentes de UI essenciais       | Pendente              |
+| Alta       | Funcionalidades CRUD para tarefas  | Pendente              |
+| Média      | Filtros e organização de tarefas   | Pendente              |
+| Média      | Persistência local de dados        | Pendente              |
+| Baixa      | Melhorias de UX adicionais         | Pendente              | 

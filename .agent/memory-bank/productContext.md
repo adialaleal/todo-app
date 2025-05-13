@@ -1,21 +1,28 @@
 # Contexto do Produto
 
-## Por que este projeto existe
-Este aplicativo de lista de tarefas foi criado para ajudar usuários a organizarem suas atividades diárias de forma eficiente. Em um mundo cada vez mais ocupado, ter uma ferramenta simples mas poderosa para gerenciar tarefas é essencial para manter a produtividade.
+## Propósito
+O Todo App existe para ajudar usuários a organizarem suas tarefas diárias, aumentando a produtividade e reduzindo o estresse causado pela gestão mental de múltiplas responsabilidades. O aplicativo serve como uma ferramenta de memória externa, permitindo que os usuários registrem tarefas, estabeleçam prioridades e acompanhem seu progresso.
 
-## Público-alvo
-- Profissionais ocupados que precisam gerenciar múltiplas tarefas
-- Estudantes que desejam organizar suas atividades acadêmicas
-- Qualquer pessoa que queira melhorar sua organização pessoal
+## Problema Resolvido
+- Sobrecarga cognitiva ao tentar lembrar de múltiplas tarefas
+- Dificuldade em priorizar atividades
+- Falta de estrutura na organização pessoal
+- Ausência de uma visualização clara das tarefas pendentes e concluídas
 
-## Diferencial
-- Simplicidade: foco em uma experiência de usuário limpa e direta
-- Rapidez: operações rápidas sem necessidade de carregamento de página
-- Acessibilidade: design responsivo que funciona em qualquer dispositivo
-- Sem cadastro: armazenamento local para começar a usar imediatamente
+## Público-Alvo
+- Profissionais ocupados
+- Estudantes
+- Qualquer pessoa que precise organizar tarefas pessoais ou profissionais
+- Usuários com diferentes níveis de familiaridade tecnológica
+
+## Diferenciação
+- Interface limpa e minimalista
+- Experiência de usuário fluida e intuitiva
+- Foco na simplicidade e facilidade de uso
+- Desempenho otimizado mesmo em dispositivos mais antigos
 
 ## Métricas de Sucesso
-- Facilidade de uso (tempo para completar tarefas básicas)
-- Retenção de usuários
-- Número de tarefas gerenciadas por usuário
-- Feedback positivo sobre a interface e funcionalidade 
+- Facilidade em adicionar e gerenciar tarefas
+- Tempo reduzido para registrar e modificar itens
+- Satisfação do usuário com a organização visual
+- Uso consistente da aplicação ao longo do tempo 

@@ -1,76 +1,61 @@
 # Contexto Ativo
 
 ## Foco Atual
-Desenvolvimento do componente TodoItem (Tarefa 4) para o Todo App com posicionamento livre.
+Implementação de funcionalidade de alternância de tema (claro/escuro) para o Todo App.
 
-## Estado Atual
-- Branch: `feature/todo-item` (criado a partir de `develop`)
-- Tarefas Concluídas:
-  - ✅ Tarefa 1: Configuração do Ambiente
-  - ✅ Tarefa 2: Modelo de Dados e Estado
-  - ✅ Tarefa 3: Componente Whiteboard
-- Tarefa em Progresso:
-  - 🔄 Tarefa 4: Componente TodoItem
+## Estado do Ciclo Plan-Confirm-Act
+- **Fase Atual**: Planejamento Confirmado
+- **Plano Confirmado**: Implementação de tema claro/escuro (aguardando execução)
+- **Último Status**: Plano detalhado confirmado, pronto para implementação
 
-## Trabalho Atual
-Implementação do componente TodoItem como cards draggable para representar cada tarefa, com as seguintes características:
-- Design visual agradável utilizando shadcn/ui
-- Cores pastéis dinâmicas
-- Funcionalidade completa de arrastar e soltar
-- Edição de conteúdo
-- Animações de adição/remoção
-- Botões para interações (remover, duplicar, editar)
-
-## Próximos Passos
-1. Implementar o componente base TodoItem usando shadcn/ui
-2. Adicionar cores pastéis dinâmicas
-3. Implementar funcionalidade de arrastar e soltar com @dnd-kit
-4. Adicionar edição de conteúdo
-5. Implementar botões de interação
-6. Adicionar animações e feedback visual
-
-## Dependências Satisfeitas
-- Store Zustand implementado com todas as funcionalidades necessárias
-- Interface TodoItem definida
-- Componente Whiteboard funcionando como container
-- Sistema de limites implementado para manter TODOs na área visível
-
-## Decisões Técnicas
-- Utilizar @dnd-kit para arrastar e soltar por sua performance e acessibilidade
-- Implementar edição inline para melhor UX
-- Utilizar componentes shadcn/ui para consistência visual
-- Aplicar animações sutis para feedback visual
-- Garantir que o posicionamento seja preservado ao arrastar/soltar
-
-## Estado do Projeto
-- Projeto inicializado com Vite, React, TypeScript e Tailwind CSS
-- Componentes shadcn/ui básicos configurados (Button, Card, Dialog, Input)
-- Zustand instalado e store completo implementado
-- Whiteboard responsivo funcionando com sistema de limites
-- Estrutura de diretórios e arquivos organizada
-
-## Observações
-- A configuração do ambiente foi completada com sucesso
-- O padrão de cores pastéis foi implementado com função de geração automática
-- O Whiteboard está pronto para receber os componentes TodoItem
-- A biblioteca @dnd-kit está disponível para implementação de arrastar e soltar
-
-## Plano Confirmado
-Transformação em aplicativo TODO com whiteboard interativo:
-
+## Plano Detalhado para Implementação de Tema Claro/Escuro
 ### Estratégia GitFlow
-1. ✅ Criar branch `develop` a partir de `main` (concluído)
-2. ✅ Criar branch `feature/setup-environment` para configuração inicial (concluído)
-3. ⏱️ Criar branches feature para cada tarefa conforme o board.md
-4. ⏱️ Quando estável, criar branch `release/v1.0.0` para testes finais
-5. ⏱️ Após testes, mesclar para `main` e para `develop`
+1. Checkout para a branch develop
+2. Criar uma nova branch de feature: `feature/theme-toggle`
+3. Após concluir a implementação, fazer merge para a branch develop
 
-### Implementação
-1. ✅ Configuração Inicial (shadcn/ui, Zustand) (concluída)
-2. ⏱️ Desenvolvimento do Modelo de Dados (próxima tarefa)
-3. ⏱️ Componentes UI (whiteboard, TODO items)
-4. ⏱️ Lógica de Negócios (adicionar, remover, mover TODOs)
-5. ⏱️ Testes e Refinamentos
-6. ⏱️ Documentação e Finalização
+### Passos de Implementação
+1. **Criar uma nova store para gerenciar o tema**
+   - Criar arquivo `src/store/themeStore.ts` para gerenciar o estado do tema
+   - Implementar persistência com Zustand para lembrar a preferência do usuário
+   - Definir funções para alternar entre temas claro e escuro
 
-As tarefas detalhadas continuam definidas no arquivo board.md, com a primeira tarefa concluída e documentada em .agent/task-logs/task-log_0003_setup_environment.md. 
+2. **Atualizar os tipos**
+   - Adicionar a interface `ThemeStore` em `src/types/index.ts`
+
+3. **Criar um componente de ToggleTheme**
+   - Implementar um componente `src/components/ui/toggle-theme.tsx` 
+   - Este componente terá um botão para alternar entre os temas
+
+4. **Atualizar o componente Toolbar**
+   - Adicionar o ThemeToggle na Toolbar para permitir ao usuário alternar entre os temas
+
+5. **Atualizar o componente App**
+   - Modificar `App.tsx` para aplicar a classe "dark" ao elemento HTML quando o tema escuro estiver ativo
+
+6. **Garantir que o tema seja aplicado antes da renderização**
+   - Atualizar `main.tsx` para aplicar o tema correto durante a inicialização da aplicação
+
+### Riscos e Mitigações
+1. **Flash de tema incorreto**: Implementar solução para aplicar o tema antes do React inicializar
+2. **Conflitos de classe CSS**: Verificar classes para evitar conflitos com design existente
+3. **Preferência do sistema**: Considerar a preferência de tema do sistema como padrão inicial
+
+## Próximos Passos Gerais
+1. Executar o plano para implementação do tema claro/escuro
+2. Atualizar o memory bank após implementação
+3. Criar task-log detalhado documentando a implementação
+4. Explorar outras melhorias potenciais para o Todo App
+
+## Notas de Contexto
+- Projeto usa React com TypeScript
+- Estilização via TailwindCSS e shadcn/ui
+- Vite como ferramenta de build
+- Persistência de dados prevista usando localStorage
+- Estrutura inicial do Memory Bank criada
+
+## Prioridades
+1. Entender completamente o estado atual do projeto
+2. Garantir funcionalidades CRUD básicas para tarefas
+3. Implementar UI responsiva e acessível
+4. Melhorar a experiência do usuário conforme necessário 

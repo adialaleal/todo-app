@@ -1,28 +1,45 @@
-# Arquitetura e Padrões do Sistema
+# Padrões do Sistema
 
-## Arquitetura Geral
-- Aplicação Single Page Application (SPA) construída com React e TypeScript
-- Gerenciamento de estado local com hooks do React (useState, useReducer, useContext)
-- Armazenamento de dados persistente usando localStorage
-- Estilização com Tailwind CSS para design responsivo
+## Arquitetura
+- Frontend em React/TypeScript com Vite
+- Componentes modulares seguindo princípios de design atômico
+- Estado gerenciado localmente via React hooks
+- Armazenamento persistente via localStorage
+- UI construída com TailwindCSS e shadcn/ui
 
 ## Padrões de Código
 - Componentes funcionais com hooks
-- Separação de preocupações: componentes de UI separados da lógica de negócios
-- Design Atômico: componentes divididos em átomos, moléculas e organismos
-- TypeScript para tipagem estática e melhor experiência de desenvolvimento
-- Uso de contextos do React para compartilhamento de estado global
+- TypeScript para tipagem estática
+- Separação de preocupações (UI, lógica, acesso a dados)
+- ESLint e Prettier para formatação consistente
+- Convenção de nomenclatura camelCase para funções e variáveis, PascalCase para componentes
+
+## Padrões de Estado
+- Estado local de componentes com useState
+- Estado contextual com useContext quando necessário
+- Persistência no localStorage para dados do usuário
+- Mecanismos de imutabilidade para manipulação de dados
+
+## Padrões de Componentes
+- Componentes pequenos, focados e reutilizáveis
+- Props bem definidas com TypeScript
+- Lazy loading quando apropriado
+- Componentes de layout separados da lógica de negócios
 
 ## Padrões de UI/UX
 - Design minimalista e limpo
-- Feedback visual imediato para ações do usuário
-- Animações sutis para melhorar a experiência do usuário
-- Consistência nos elementos de UI em toda a aplicação
-- Layout responsivo que se adapta a diferentes tamanhos de tela
+- Feedback visual para ações do usuário
+- Cores consistentes e acessíveis
+- Responsividade em todos os componentes
+- Transições suaves
 
-## Convenções de Nomenclatura
-- Componentes: PascalCase (TodoItem, FilterButton)
-- Funções e variáveis: camelCase (addTodo, currentFilter)
-- Constantes: UPPER_SNAKE_CASE (DEFAULT_FILTER, LOCAL_STORAGE_KEY)
-- Interfaces e tipos: PascalCase com prefixo I para interfaces (ITodo, IFilterProps)
-- Arquivos: mesmo nome do componente principal que contêm 
+## Padrões de Teste
+- Testes unitários para lógica principal
+- Testes de componentes para comportamento da UI
+- Snapshots para componentes estáveis
+
+## Fluxo de Desenvolvimento
+- Branches de feature
+- Commits atômicos
+- Code reviews antes de merge
+- Desenvolvimento orientado a componentes 

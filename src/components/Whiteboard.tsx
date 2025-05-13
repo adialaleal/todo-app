@@ -1,7 +1,7 @@
-import { useRef, useState, useEffect } from 'react';
-import { useTodoStore } from '@/store/todoStore';
-import { cn } from '@/lib/utils';
-import { WhiteboardDropArea } from './WhiteboardDropArea';
+import { useRef, useState, useEffect } from "react";
+import { useTodoStore } from "@/store/todoStore";
+import { cn } from "@/lib/utils";
+import { WhiteboardDropArea } from "./WhiteboardDropArea";
 
 interface WhiteboardProps {
   className?: string;
@@ -25,17 +25,17 @@ export const Whiteboard = ({ className }: WhiteboardProps) => {
 
     // Executar inicialmente e adicionar evento de resize
     updateDimensions();
-    window.addEventListener('resize', updateDimensions);
+    window.addEventListener("resize", updateDimensions);
 
     // Limpar evento ao desmontar
-    return () => window.removeEventListener('resize', updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
   return (
     <div
       ref={boardRef}
       className={cn(
-        "relative w-full bg-slate-50 overflow-hidden border border-slate-200 rounded-lg shadow-sm",
+        "relative w-full bg-slate-50 dark:bg-slate-800 overflow-hidden border border-slate-200 dark:border-slate-700 rounded-lg shadow-sm",
         "h-[calc(100vh-8rem)] md:h-[calc(100vh-7rem)]", // Altura ajustada para diferentes tamanhos de tela
         className
       )}
@@ -44,32 +44,33 @@ export const Whiteboard = ({ className }: WhiteboardProps) => {
       {!isMobile && (
         <div className="absolute inset-0 grid grid-cols-[repeat(20,1fr)] grid-rows-[repeat(20,1fr)] opacity-10 pointer-events-none">
           {Array.from({ length: 400 }).map((_, index) => (
-            <div 
-              key={index} 
-              className="border border-slate-400"
+            <div
+              key={index}
+              className="border border-slate-400 dark:border-slate-500"
             />
           ))}
         </div>
       )}
-      
+
       {/* Área de drop com TODOs */}
       <WhiteboardDropArea parentRef={boardRef} />
 
       {/* Mensagem quando não há TODOs */}
       {todos.length === 0 && (
-        <div className="absolute inset-0 flex items-center justify-center text-slate-400 text-center px-4">
+        <div className="absolute inset-0 flex items-center justify-center text-slate-400 dark:text-slate-500 text-center px-4">
           <p>
-            {isMobile 
-              ? "Toque no botão + para adicionar TODOs" 
+            {isMobile
+              ? "Toque no botão + para adicionar TODOs"
               : "Adicione TODOs usando a barra de ferramentas"}
           </p>
         </div>
       )}
 
       {/* Informação de depuração - pode ser removida na versão final */}
-      <div className="absolute bottom-2 right-2 text-xs text-slate-400 pointer-events-none hidden md:block">
-        Dimensões: {dimensions.width}x{dimensions.height} | TODOs: {todos.length}
+      <div className="absolute bottom-2 right-2 text-xs text-slate-400 dark:text-slate-500 pointer-events-none hidden md:block">
+        Dimensões: {dimensions.width}x{dimensions.height} | TODOs:{" "}
+        {todos.length}
       </div>
     </div>
   );
-}; 
+};
