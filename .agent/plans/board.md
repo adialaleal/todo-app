@@ -78,26 +78,26 @@ Todas as tarefas seguirão o seguinte fluxo:
 
 ---
 
-### 4️⃣ Componente TodoItem
+### ✅ 4️⃣ Componente TodoItem
 **Branch**: `feature/todo-item`
 
 **Descrição**: Desenvolver o componente individual para cada TODO.
 
 **Checklist**:
-- [ ] Criar componente base de TodoItem usando shadcn/ui
-- [ ] Implementar visualização com cores pastéis dinâmicas
-- [ ] Adicionar funcionalidade de arrastar e soltar
-- [ ] Implementar edição de conteúdo
-- [ ] Adicionar botão de remoção
-- [ ] Implementar animações de adição/remoção
-- [ ] Garantir que o posicionamento seja preservado ao arrastar
-- [ ] Adicionar indicador visual ao arrastar
+- [x] Criar componente base de TodoItem usando shadcn/ui
+- [x] Implementar visualização com cores pastéis dinâmicas
+- [x] Adicionar funcionalidade de arrastar e soltar
+- [x] Implementar edição de conteúdo
+- [x] Adicionar botão de remoção
+- [x] Implementar animações de adição/remoção
+- [x] Garantir que o posicionamento seja preservado ao arrastar
+- [x] Adicionar indicador visual ao arrastar
 
 **Dependências**: Tarefa 2
 
 **Tasklog**: `.agent/task-logs/task-log_0006_todo_item.md`
 
-**Status**: Pendente 🔄
+**Status**: Concluído ✓
 
 ---
 
@@ -119,7 +119,7 @@ Todas as tarefas seguirão o seguinte fluxo:
 
 **Tasklog**: `.agent/task-logs/task-log_0007_toolbar.md`
 
-**Status**: Pendente
+**Status**: Pendente 🔄
 
 ---
 
@@ -208,4 +208,5 @@ A cada conclusão de tarefa, um tasklog detalhado deve ser criado para registrar
 - ✅ Ambiente configurado com shadcn/ui, Zustand e estrutura de diretórios base
 - ✅ Modelo de dados e store Zustand implementados com funcionalidades avançadas
 - ✅ Componente Whiteboard responsivo com sistema de limites funcionando
-- 🔄 Próximo passo: Desenvolvimento do componente TodoItem com arrastar e soltar 
+- ✅ Componente TodoItem com arrastar e soltar, edição e funcionalidades completas
+- 🔄 Próximo passo: Desenvolvimento da Barra de Ferramentas 
