@@ -1,13 +1,14 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage, PersistOptions } from 'zustand/middleware';
 import { TodoItem, TodoStore } from '@/types';
 import { generateId, generatePastelColor } from '@/lib/utils';
+import { toast } from 'sonner';
 
 // Função para posicionar um novo TODO aleatoriamente na tela
 const getRandomPosition = () => {
   // Considerando dimensões típicas de tela
-  const maxWidth = window.innerWidth - 200; // Subtrair largura do TODO
-  const maxHeight = window.innerHeight - 200; // Subtrair altura do TODO
+  const maxWidth = Math.max(300, window.innerWidth - 250); // Subtrair largura do TODO
+  const maxHeight = Math.max(300, window.innerHeight - 250); // Subtrair altura do TODO
   
   // Evitar posicionar muito próximo das bordas
   const x = 50 + Math.random() * (maxWidth - 100);
@@ -22,6 +23,69 @@ const getMaxZIndex = (todos: TodoItem[]): number => {
   return Math.max(...todos.map(todo => todo.zIndex || 0)) + 1;
 };
 
+// Storage personalizado com tratamento de erros e recuperação
+const customStorage: PersistOptions<TodoStore>['storage'] = {
+  ...createJSONStorage(() => localStorage),
+  getItem: (name) => {
+    try {
+      // Tentar recuperar os dados normalmente
+      const data = localStorage.getItem(name);
+      if (!data) return null;
+      
+      return JSON.parse(data);
+    } catch (error) {
+      // Em caso de erro no parsing, tente recuperar um backup
+      console.error('Erro ao carregar dados:', error);
+      
+      try {
+        // Tentar carregar o backup
+        const backupData = localStorage.getItem(`${name}_backup`);
+        if (backupData) {
+          const parsedBackup = JSON.parse(backupData);
+          toast.warning('Recuperação de dados', {
+            description: 'Dados principais corrompidos. Carregando backup.'
+          });
+          return parsedBackup;
+        }
+      } catch (backupError) {
+        console.error('Erro ao carregar backup:', backupError);
+      }
+      
+      // Se tudo falhar, iniciar com estado limpo
+      toast.error('Erro de dados', {
+        description: 'Não foi possível recuperar seus dados. Iniciando com estado limpo.'
+      });
+      return null;
+    }
+  },
+  setItem: (name, value) => {
+    try {
+      // Antes de salvar os dados principais, faça um backup da versão anterior
+      const currentData = localStorage.getItem(name);
+      if (currentData) {
+        localStorage.setItem(`${name}_backup`, currentData);
+      }
+      
+      // Salvar os novos dados
+      const stringifiedValue = JSON.stringify(value);
+      localStorage.setItem(name, stringifiedValue);
+    } catch (error) {
+      console.error('Erro ao salvar dados:', error);
+      toast.error('Erro ao salvar', {
+        description: 'Não foi possível salvar os dados. Seu progresso pode ser perdido.'
+      });
+    }
+  },
+  removeItem: (name) => {
+    try {
+      localStorage.removeItem(name);
+      localStorage.removeItem(`${name}_backup`);
+    } catch (error) {
+      console.error('Erro ao remover item:', error);
+    }
+  }
+};
+
 // Criação do store Zustand com persistência
 export const useTodoStore = create<TodoStore>()(
   persist(
@@ -30,108 +94,169 @@ export const useTodoStore = create<TodoStore>()(
       
       // Ações básicas CRUD
       addTodo: (content) => set((state) => {
-        const position = getRandomPosition();
-        const newTodo: TodoItem = {
-          id: generateId(),
-          content,
-          position,
-          color: generatePastelColor(),
-          createdAt: Date.now(),
-          lastUpdated: Date.now(),
-          zIndex: getMaxZIndex(state.todos),
-        };
-        
-        return { todos: [...state.todos, newTodo] };
+        try {
+          const position = getRandomPosition();
+          const newTodo: TodoItem = {
+            id: generateId(),
+            content,
+            position,
+            color: generatePastelColor(),
+            createdAt: Date.now(),
+            lastUpdated: Date.now(),
+            zIndex: getMaxZIndex(state.todos),
+          };
+          
+          return { todos: [...state.todos, newTodo] };
+        } catch (error) {
+          console.error('Erro ao adicionar TODO:', error);
+          toast.error('Erro ao adicionar TODO', {
+            description: 'Ocorreu um problema ao criar o novo item.'
+          });
+          return state;
+        }
       }),
       
-      removeTodo: (id) => set((state) => ({
-        todos: state.todos.filter((todo) => todo.id !== id),
-      })),
+      removeTodo: (id) => set((state) => {
+        try {
+          return { todos: state.todos.filter((todo) => todo.id !== id) };
+        } catch (error) {
+          console.error('Erro ao remover TODO:', error);
+          toast.error('Erro ao remover TODO', {
+            description: 'Ocorreu um problema ao remover o item.'
+          });
+          return state;
+        }
+      }),
       
-      updateTodoPosition: (id, x, y) => set((state) => ({
-        todos: state.todos.map((todo) =>
-          todo.id === id 
-            ? { 
-                ...todo, 
-                position: { x, y },
-                lastUpdated: Date.now()
-              } 
-            : todo
-        ),
-      })),
+      updateTodoPosition: (id, x, y) => set((state) => {
+        try {
+          return {
+            todos: state.todos.map((todo) =>
+              todo.id === id 
+                ? { 
+                    ...todo, 
+                    position: { x, y },
+                    lastUpdated: Date.now()
+                  } 
+                : todo
+            ),
+          };
+        } catch (error) {
+          console.error('Erro ao atualizar posição:', error);
+          return state;
+        }
+      }),
       
-      updateTodoContent: (id, content) => set((state) => ({
-        todos: state.todos.map((todo) =>
-          todo.id === id 
-            ? { 
-                ...todo, 
-                content,
-                lastUpdated: Date.now()
-              } 
-            : todo
-        ),
-      })),
+      updateTodoContent: (id, content) => set((state) => {
+        try {
+          return {
+            todos: state.todos.map((todo) =>
+              todo.id === id 
+                ? { 
+                    ...todo, 
+                    content,
+                    lastUpdated: Date.now()
+                  } 
+                : todo
+            ),
+          };
+        } catch (error) {
+          console.error('Erro ao atualizar conteúdo:', error);
+          toast.error('Erro ao salvar conteúdo', {
+            description: 'Ocorreu um problema ao atualizar o texto.'
+          });
+          return state;
+        }
+      }),
 
       // Novas funcionalidades
-      updateTodoColor: (id, color) => set((state) => ({
-        todos: state.todos.map((todo) =>
-          todo.id === id 
-            ? { 
-                ...todo, 
-                color,
-                lastUpdated: Date.now()
-              } 
-            : todo
-        ),
-      })),
+      updateTodoColor: (id, color) => set((state) => {
+        try {
+          return {
+            todos: state.todos.map((todo) =>
+              todo.id === id 
+                ? { 
+                    ...todo, 
+                    color,
+                    lastUpdated: Date.now()
+                  } 
+                : todo
+            ),
+          };
+        } catch (error) {
+          console.error('Erro ao atualizar cor:', error);
+          return state;
+        }
+      }),
 
       clearAllTodos: () => set({ todos: [] }),
 
       bringToFront: (id) => set((state) => {
-        const newZIndex = getMaxZIndex(state.todos);
-        return {
-          todos: state.todos.map((todo) =>
-            todo.id === id 
-              ? { 
-                  ...todo, 
-                  zIndex: newZIndex,
-                  lastUpdated: Date.now()
-                } 
-              : todo
-          ),
-        };
+        try {
+          const newZIndex = getMaxZIndex(state.todos);
+          return {
+            todos: state.todos.map((todo) =>
+              todo.id === id 
+                ? { 
+                    ...todo, 
+                    zIndex: newZIndex,
+                    lastUpdated: Date.now()
+                  } 
+                : todo
+            ),
+          };
+        } catch (error) {
+          console.error('Erro ao trazer para frente:', error);
+          return state;
+        }
       }),
 
       duplicateTodo: (id) => set((state) => {
-        const todoToDuplicate = state.todos.find(todo => todo.id === id);
-        if (!todoToDuplicate) return state;
-        
-        // Cria uma cópia com novo ID e posição ligeiramente diferente
-        const newTodo: TodoItem = {
-          ...todoToDuplicate,
-          id: generateId(),
-          position: {
-            x: todoToDuplicate.position.x + 20,
-            y: todoToDuplicate.position.y + 20,
-          },
-          createdAt: Date.now(),
-          lastUpdated: Date.now(),
-          zIndex: getMaxZIndex(state.todos),
-        };
-        
-        return { todos: [...state.todos, newTodo] };
+        try {
+          const todoToDuplicate = state.todos.find(todo => todo.id === id);
+          if (!todoToDuplicate) return state;
+          
+          // Cria uma cópia com novo ID e posição ligeiramente diferente
+          const newTodo: TodoItem = {
+            ...todoToDuplicate,
+            id: generateId(),
+            position: {
+              x: todoToDuplicate.position.x + 20,
+              y: todoToDuplicate.position.y + 20,
+            },
+            createdAt: Date.now(),
+            lastUpdated: Date.now(),
+            zIndex: getMaxZIndex(state.todos),
+          };
+          
+          return { todos: [...state.todos, newTodo] };
+        } catch (error) {
+          console.error('Erro ao duplicar TODO:', error);
+          toast.error('Erro ao duplicar', {
+            description: 'Não foi possível duplicar o item.'
+          });
+          return state;
+        }
       }),
 
       // Ações em lote
       saveTodoLayout: () => {
-        const { todos } = get();
-        // Retorna apenas as informações de posição para restauração rápida
-        const layoutData = todos.map(todo => ({
-          id: todo.id,
-          position: todo.position,
-          zIndex: todo.zIndex
-        }));
-        return JSON.stringify(layoutData);
+        try {
+          const { todos } = get();
+          // Retorna apenas as informações de posição para restauração rápida
+          const layoutData = todos.map(todo => ({
+            id: todo.id,
+            position: todo.position,
+            zIndex: todo.zIndex
+          }));
+          return JSON.stringify(layoutData);
+        } catch (error) {
+          console.error('Erro ao salvar layout:', error);
+          toast.error('Erro ao salvar layout', {
+            description: 'Ocorreu um problema ao salvar as posições.'
+          });
+          return "[]";
+        }
       },
 
       loadTodoLayout: (layoutData) => set((state) => {
@@ -156,13 +281,24 @@ export const useTodoStore = create<TodoStore>()(
           return { todos: updatedTodos };
         } catch (e) {
           console.error('Erro ao carregar layout:', e);
+          toast.error('Erro ao carregar layout', {
+            description: 'O formato dos dados parece ser inválido.'
+          });
           return state; // Retorna o estado inalterado em caso de erro
         }
       }),
 
       exportTodos: () => {
-        const { todos } = get();
-        return JSON.stringify(todos);
+        try {
+          const { todos } = get();
+          return JSON.stringify(todos);
+        } catch (error) {
+          console.error('Erro ao exportar TODOs:', error);
+          toast.error('Erro ao exportar', {
+            description: 'Não foi possível gerar o texto de exportação.'
+          });
+          return "[]";
+        }
       },
 
       importTodos: (data) => set((state) => {
@@ -182,6 +318,19 @@ export const useTodoStore = create<TodoStore>()(
             typeof item.color === 'string'
           );
 
+          if (validTodos.length === 0) {
+            toast.warning('Nenhum item válido', {
+              description: 'Não foram encontrados TODOs válidos nos dados importados.'
+            });
+            return state;
+          }
+
+          if (validTodos.length < parsedData.length) {
+            toast.warning('Alguns itens ignorados', {
+              description: `${parsedData.length - validTodos.length} itens foram ignorados por terem formato inválido.`
+            });
+          }
+
           // Adiciona timestamp atual para os itens importados
           const timestamp = Date.now();
           const processedTodos = validTodos.map(todo => ({
@@ -194,12 +343,17 @@ export const useTodoStore = create<TodoStore>()(
           return { todos: [...state.todos, ...processedTodos] };
         } catch (e) {
           console.error('Erro ao importar TODOs:', e);
+          toast.error('Erro ao importar', {
+            description: 'Os dados fornecidos estão em formato inválido.'
+          });
           return state; // Retorna o estado inalterado em caso de erro
         }
       }),
     }),
     {
       name: 'todo-storage', // Nome para localStorage
+      storage: customStorage,
+      version: 1, // Versão para controle de migrações
     }
   )
 ); 
