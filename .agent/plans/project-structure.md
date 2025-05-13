@@ -1,47 +1,72 @@
 # Estrutura do Projeto
 
-## Organização de Diretórios
+## Visão Geral
+A estrutura do projeto segue boas práticas para aplicações React modernas com TypeScript, organizando componentes, hooks, estilos e utilitários de forma coesa e modular.
+
+## Estrutura de Diretórios
+
 ```
-src/
-├── components/           # Componentes React reutilizáveis
-│   ├── ui/               # Componentes de UI básicos (botões, inputs, etc.)
-│   ├── TodoItem.tsx      # Componente para um item de tarefa individual
-│   ├── TodoList.tsx      # Componente para a lista de tarefas
-│   ├── TodoInput.tsx     # Componente para adicionar novas tarefas
-│   ├── TodoFilter.tsx    # Componente para filtrar tarefas
-│   └── TodoApp.tsx       # Componente principal que orquestra outros componentes
-├── hooks/                # Hooks personalizados
-│   ├── useTodos.ts       # Hook para gerenciar o estado das tarefas
-│   └── useLocalStorage.ts # Hook para interagir com localStorage
-├── contexts/             # Contextos React para estado global
-│   └── TodoContext.tsx   # Contexto para compartilhar estado das tarefas
-├── types/                # Definições de tipos TypeScript
-│   └── index.ts          # Exporta todos os tipos
-├── utils/                # Funções utilitárias
-│   └── storage.ts        # Utilitários para armazenamento
-├── styles/               # Estilos globais e variáveis Tailwind
-│   └── globals.css       # Estilos CSS globais
-├── App.tsx               # Componente raiz da aplicação
-└── main.tsx              # Ponto de entrada da aplicação
+todo-app/
+├── .agent/                    # Diretório do Memory Bank
+│   ├── memory-bank/          # Documentação do contexto do projeto
+│   ├── plans/                # Planos detalhados
+│   └── task-logs/            # Registros de tarefas executadas
+├── public/                   # Arquivos estáticos
+├── src/                      # Código-fonte da aplicação
+│   ├── components/           # Componentes React
+│   │   ├── ui/               # Componentes de UI básicos
+│   │   └── todos/            # Componentes específicos de tarefas
+│   ├── hooks/                # Hooks personalizados
+│   ├── lib/                  # Bibliotecas e utilitários
+│   ├── types/                # Definições de tipos TypeScript
+│   ├── styles/               # Estilos globais
+│   ├── App.tsx               # Componente principal da aplicação
+│   └── main.tsx              # Ponto de entrada da aplicação
+├── .gitignore                # Arquivos ignorados pelo Git
+├── index.html                # Arquivo HTML de entrada
+├── package.json              # Dependências e scripts
+├── tsconfig.json             # Configuração do TypeScript
+└── vite.config.ts            # Configuração do Vite
 ```
+
+## Estrutura de Componentes
+O projeto utiliza uma abordagem de componentes modulares, divididos em:
+
+### Componentes UI (src/components/ui/)
+- Componentes básicos e reutilizáveis (botões, inputs, cards, etc.)
+- Maioritariamente baseados em shadcn/ui
+- Foco em acessibilidade e consistência
+
+### Componentes de Tarefas (src/components/todos/)
+- `TodoList.tsx` - Lista de tarefas
+- `TodoItem.tsx` - Item individual de tarefa
+- `TodoInput.tsx` - Input para criar novas tarefas
+- `TodoFilter.tsx` - Filtros para visualização
+- `TodoStats.tsx` - Estatísticas e contadores
+
+## Hooks Personalizados (src/hooks/)
+- `useTodos.tsx` - Lógica de gerenciamento de tarefas
+- `useLocalStorage.tsx` - Persistência em localStorage
+- `useFilter.tsx` - Lógica de filtragem de tarefas
+
+## Tipos TypeScript (src/types/)
+- `Todo.ts` - Interface para o tipo de tarefa
+- Outros tipos específicos da aplicação
 
 ## Convenções de Nomenclatura
-- Arquivos de componentes: PascalCase (ex: TodoItem.tsx)
-- Hooks e utilitários: camelCase (ex: useTodos.ts)
-- Um componente por arquivo
-- Exportações nomeadas preferidas sobre exportações padrão
+- Componentes: PascalCase (ex: TodoItem)
+- Hooks: camelCase começando com "use" (ex: useTodos)
+- Funções utilitárias: camelCase (ex: formatDate)
+- Tipos/Interfaces: PascalCase (ex: TodoProps)
+- Arquivos CSS modules: nome.module.css
 
-## Organização do Código
-- Componentes agrupados por funcionalidade
-- Lógica de negócios separada da UI
-- Estado global gerenciado por contextos
-- Hooks personalizados para lógica reutilizável
-- Interfaces claras entre camadas
+## Estratégia para Importações
+- Importações absolutas a partir de src/
+- Agrupamento de exportações em arquivos index.ts para facilitar importações
+- Importações de tipos separadas do código
 
-## Padrões de Implementação
+## Convenções de Componentes
+- Props definidas com interfaces TypeScript
 - Componentes funcionais com hooks
-- Props tipadas com TypeScript
-- Uso de lazy loading quando apropriado
-- Estado local com useState para componentes simples
-- Gerenciamento de estado complexo com useReducer
-- Estilização com classes utilitárias do Tailwind CSS 
+- Estilos via TailwindCSS
+- Estrutura consistente para facilitar manutenção 

@@ -1,24 +1,29 @@
 # Resumo do Projeto
 
-## Objetivo Principal
-Desenvolver um aplicativo de lista de tarefas (Todo App) eficiente e fácil de usar que permita aos usuários gerenciar suas tarefas diárias.
+## Missão
+Desenvolver uma aplicação de lista de tarefas (Todo App) moderna, intuitiva e eficiente que permita aos usuários gerenciar suas tarefas diárias de forma eficaz.
 
-## Requisitos Principais
+## Objetivos
+- Criar uma interface de usuário limpa e responsiva
+- Implementar funcionalidades básicas de CRUD para tarefas
+- Proporcionar uma experiência de usuário fluida e agradável
+- Garantir desempenho e escalabilidade adequados
+
+## Requisitos Funcionais
 - Adicionar novas tarefas
 - Marcar tarefas como concluídas
-- Editar tarefas existentes
+- Editar detalhes de tarefas existentes
 - Excluir tarefas
-- Filtrar tarefas por status (todas, ativas, concluídas)
-- Interface de usuário responsiva e intuitiva
+- Filtrar tarefas por status (completas/incompletas)
+- Armazenar tarefas localmente para persistência
 
-## Tecnologias
-- React/TypeScript
-- Tailwind CSS para estilização
-- Vite como ferramenta de build
-- Armazenamento local para persistência de dados
+## Requisitos Não-Funcionais
+- Design responsivo para desktop e dispositivos móveis
+- Tempo de carregamento rápido
+- Interface intuitiva e acessível
+- Código bem estruturado e facilmente mantido
 
-## Prioridades
-1. Funcionalidade básica de gerenciamento de tarefas
-2. Interface de usuário limpa e responsiva
-3. Experiência de usuário intuitiva
-4. Desempenho e eficiência 
+## Prazo e Escopo
+- Desenvolvimento incremental com entregas funcionais
+- Foco na qualidade e usabilidade
+- Implementação de funcionalidades essenciais primeiro, recursos adicionais posteriormente 

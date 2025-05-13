@@ -30,4 +30,11 @@ export interface TodoStore {
   loadTodoLayout: (layoutData: string) => void;
   exportTodos: () => string;
   importTodos: (data: string) => void;
-} 
+}
+
+// Interface para o gerenciamento de tema
+export interface ThemeStore {
+  theme: "light" | "dark";
+  toggleTheme: () => void;
+  setTheme: (theme: "light" | "dark") => void;
+}
