@@ -1,57 +1,59 @@
 # Contexto Ativo
 
 ## Foco Atual
-Desenvolvimento do componente Whiteboard (Tarefa 3) para o Todo App com posicionamento livre.
+Desenvolvimento do componente TodoItem (Tarefa 4) para o Todo App com posicionamento livre.
 
 ## Estado Atual
-- Branch: `feature/whiteboard` (criado a partir de `develop`)
+- Branch: `feature/todo-item` (criado a partir de `develop`)
 - Tarefas Concluídas:
   - ✅ Tarefa 1: Configuração do Ambiente
   - ✅ Tarefa 2: Modelo de Dados e Estado
+  - ✅ Tarefa 3: Componente Whiteboard
 - Tarefa em Progresso:
-  - 🔄 Tarefa 3: Componente Whiteboard
+  - 🔄 Tarefa 4: Componente TodoItem
 
 ## Trabalho Atual
-Implementação do componente Whiteboard como um espaço de posicionamento livre para os TODOs, com as seguintes características:
-- Responsividade para diferentes tamanhos de tela
-- Sistema de posicionamento absoluto
-- Detecção de limites
-- Conectividade com o store Zustand
-- Interface limpa e intuitiva
+Implementação do componente TodoItem como cards draggable para representar cada tarefa, com as seguintes características:
+- Design visual agradável utilizando shadcn/ui
+- Cores pastéis dinâmicas
+- Funcionalidade completa de arrastar e soltar
+- Edição de conteúdo
+- Animações de adição/remoção
+- Botões para interações (remover, duplicar, editar)
 
 ## Próximos Passos
-1. Implementar o esqueleto básico do componente Whiteboard
-2. Adicionar sistema de posicionamento absoluto
-3. Implementar responsividade
-4. Conectar com o store Zustand
-5. Adicionar elementos visuais (grid, indicadores)
-6. Realizar testes de compatibilidade de dispositivos
+1. Implementar o componente base TodoItem usando shadcn/ui
+2. Adicionar cores pastéis dinâmicas
+3. Implementar funcionalidade de arrastar e soltar com @dnd-kit
+4. Adicionar edição de conteúdo
+5. Implementar botões de interação
+6. Adicionar animações e feedback visual
 
 ## Dependências Satisfeitas
 - Store Zustand implementado com todas as funcionalidades necessárias
 - Interface TodoItem definida
-- Utilidades de posicionamento e cores funcionando corretamente
+- Componente Whiteboard funcionando como container
+- Sistema de limites implementado para manter TODOs na área visível
 
 ## Decisões Técnicas
-- Utilizar posicionamento absoluto para liberdade total de movimento
-- Implementar limites de tela para evitar que TODOs fiquem inacessíveis
-- Usar Tailwind CSS para responsividade
-- Conectar diretamente ao store Zustand para estado
-- Considerar sistema de coordenadas relativas para ajuste em diferentes tamanhos de tela
+- Utilizar @dnd-kit para arrastar e soltar por sua performance e acessibilidade
+- Implementar edição inline para melhor UX
+- Utilizar componentes shadcn/ui para consistência visual
+- Aplicar animações sutis para feedback visual
+- Garantir que o posicionamento seja preservado ao arrastar/soltar
 
 ## Estado do Projeto
 - Projeto inicializado com Vite, React, TypeScript e Tailwind CSS
 - Componentes shadcn/ui básicos configurados (Button, Card, Dialog, Input)
-- Zustand instalado e store básico criado
+- Zustand instalado e store completo implementado
+- Whiteboard responsivo funcionando com sistema de limites
 - Estrutura de diretórios e arquivos organizada
-- Definição de tipos e interfaces criadas
-- Sistema GitFlow implementado com branches develop e feature
 
 ## Observações
 - A configuração do ambiente foi completada com sucesso
 - O padrão de cores pastéis foi implementado com função de geração automática
-- A biblioteca @dnd-kit foi instalada para arrastar e soltar os TODOs
-- O sistema de persistência com localStorage está configurado no Zustand
+- O Whiteboard está pronto para receber os componentes TodoItem
+- A biblioteca @dnd-kit está disponível para implementação de arrastar e soltar
 
 ## Plano Confirmado
 Transformação em aplicativo TODO com whiteboard interativo:
