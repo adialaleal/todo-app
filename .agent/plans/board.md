@@ -101,25 +101,25 @@ Todas as tarefas seguirão o seguinte fluxo:
 
 ---
 
-### 5️⃣ Barra de Ferramentas
+### ✅ 5️⃣ Barra de Ferramentas
 **Branch**: `feature/toolbar`
 
 **Descrição**: Criar barra de ferramentas para adicionar novos TODOs e controlar o whiteboard.
 
 **Checklist**:
-- [ ] Implementar componente de barra de ferramentas usando shadcn/ui
-- [ ] Adicionar botão para criar novo TODO
-- [ ] Criar modal ou popover para entrada de texto
-- [ ] Implementar controles de zoom/visualização (opcional)
-- [ ] Adicionar funcionalidade de limpar whiteboard
-- [ ] Criar opção para salvar/carregar layouts (opcional)
-- [ ] Garantir responsividade da barra de ferramentas
+- [x] Implementar componente de barra de ferramentas usando shadcn/ui
+- [x] Adicionar botão para criar novo TODO
+- [x] Criar modal ou popover para entrada de texto
+- [x] Implementar controles de zoom/visualização (opcional)
+- [x] Adicionar funcionalidade de limpar whiteboard
+- [x] Criar opção para salvar/carregar layouts (opcional)
+- [x] Garantir responsividade da barra de ferramentas
 
 **Dependências**: Tarefas 3 e 4
 
 **Tasklog**: `.agent/task-logs/task-log_0007_toolbar.md`
 
-**Status**: Pendente 🔄
+**Status**: Concluído ✓
 
 ---
 
@@ -209,4 +209,5 @@ A cada conclusão de tarefa, um tasklog detalhado deve ser criado para registrar
 - ✅ Modelo de dados e store Zustand implementados com funcionalidades avançadas
 - ✅ Componente Whiteboard responsivo com sistema de limites funcionando
 - ✅ Componente TodoItem com arrastar e soltar, edição e funcionalidades completas
-- 🔄 Próximo passo: Desenvolvimento da Barra de Ferramentas 
+- ✅ Barra de Ferramentas implementada com todas as funcionalidades de gerenciamento de TODOs
+- 🔄 Próximo passo: Integração e Responsividade (verificação final) 
