@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { useTodoStore } from '@/store/todoStore';
 import { cn } from '@/lib/utils';
+import { WhiteboardDropArea } from './WhiteboardDropArea';
 
 interface WhiteboardProps {
   className?: string;
@@ -46,14 +47,15 @@ export const Whiteboard = ({ className }: WhiteboardProps) => {
         ))}
       </div>
       
-      {/* Container para os TODOs - será implementado na Tarefa 4 */}
-      <div className="absolute inset-0">
-        {todos.length === 0 && (
-          <div className="absolute inset-0 flex items-center justify-center text-slate-400">
-            Adicione TODOs usando a barra de ferramentas
-          </div>
-        )}
-      </div>
+      {/* Área de drop com TODOs */}
+      <WhiteboardDropArea parentRef={boardRef} />
+
+      {/* Mensagem quando não há TODOs */}
+      {todos.length === 0 && (
+        <div className="absolute inset-0 flex items-center justify-center text-slate-400">
+          Adicione TODOs usando a barra de ferramentas
+        </div>
+      )}
 
       {/* Informação de depuração - pode ser removida na versão final */}
       <div className="absolute bottom-2 right-2 text-xs text-slate-400 pointer-events-none">
