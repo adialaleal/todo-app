@@ -1,6 +1,12 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { ThemeStore } from "@/types";
+
+// Interface para o gerenciamento de tema
+interface ThemeState {
+  theme: "light" | "dark";
+  toggleTheme: () => void;
+  setTheme: (theme: "light" | "dark") => void;
+}
 
 // Verificar a preferência de tema do sistema
 const getSystemThemePreference = (): "light" | "dark" => {
@@ -13,7 +19,7 @@ const getSystemThemePreference = (): "light" | "dark" => {
 };
 
 // Criar a store com persistência
-export const useThemeStore = create<ThemeStore>()(
+export const useThemeStore = create<ThemeState>()(
   persist(
     (set) => ({
       // O tema inicial é baseado na preferência do sistema ou 'light' como fallback
@@ -26,10 +32,10 @@ export const useThemeStore = create<ThemeStore>()(
         })),
 
       // Função para definir um tema específico
-      setTheme: (theme: "light" | "dark") => set({ theme }),
+      setTheme: (theme: "light" | "dark") => set(() => ({ theme })),
     }),
     {
-      name: "theme-storage", // Nome para localStorage
+      name: "todo-theme-storage", // Nome para localStorage
       version: 1, // Versão para controle de migrações
     }
   )

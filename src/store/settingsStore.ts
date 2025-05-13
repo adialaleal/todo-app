@@ -1,50 +1,67 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { SettingsStore, Priority } from "@/types";
 
-export const useSettingsStore = create<SettingsStore>()(
+export type ViewMode = "todos" | "whiteboard" | "split";
+export type SortOrder = "createdAt" | "lastUpdated" | "priority";
+
+interface SettingsState {
+  // UI Settings
+  showTimestamps: boolean;
+  showCompletedTodos: boolean;
+  theme: "light" | "dark" | "system";
+
+  // Layout Settings
+  defaultView: ViewMode;
+  defaultSortOrder: SortOrder;
+  compactMode: boolean;
+
+  // Actions
+  toggleShowTimestamps: () => void;
+  toggleShowCompletedTodos: () => void;
+  setTheme: (theme: "light" | "dark" | "system") => void;
+  setDefaultView: (view: ViewMode) => void;
+  setDefaultSortOrder: (order: SortOrder) => void;
+  toggleCompactMode: () => void;
+  resetSettings: () => void;
+}
+
+// Estado padrão das configurações
+const defaultSettings = {
+  showTimestamps: true,
+  showCompletedTodos: true,
+  theme: "system",
+  defaultView: "split",
+  defaultSortOrder: "createdAt",
+  compactMode: false,
+};
+
+export const useSettingsStore = create<SettingsState>()(
   persist(
     (set) => ({
-      showCompletedTodos: true,
-      defaultCategory: "",
-      defaultPriority: null,
-      sortOrder: "createdAt",
-      showTimestamps: true,
-      defaultView: "board",
+      // Estado inicial
+      ...defaultSettings,
 
       // Ações
-      toggleShowCompletedTodos: () =>
-        set((state) => ({
-          showCompletedTodos: !state.showCompletedTodos,
-        })),
-
-      setDefaultCategory: (category) =>
-        set(() => ({
-          defaultCategory: category,
-        })),
-
-      setDefaultPriority: (priority) =>
-        set(() => ({
-          defaultPriority: priority,
-        })),
-
-      setSortOrder: (order) =>
-        set(() => ({
-          sortOrder: order,
-        })),
-
       toggleShowTimestamps: () =>
-        set((state) => ({
-          showTimestamps: !state.showTimestamps,
-        })),
+        set((state) => ({ showTimestamps: !state.showTimestamps })),
 
-      setDefaultView: (view) =>
-        set(() => ({
-          defaultView: view,
-        })),
+      toggleShowCompletedTodos: () =>
+        set((state) => ({ showCompletedTodos: !state.showCompletedTodos })),
+
+      setTheme: (theme) => set(() => ({ theme })),
+
+      setDefaultView: (defaultView) => set(() => ({ defaultView })),
+
+      setDefaultSortOrder: (defaultSortOrder) =>
+        set(() => ({ defaultSortOrder })),
+
+      toggleCompactMode: () =>
+        set((state) => ({ compactMode: !state.compactMode })),
+
+      resetSettings: () => set(() => ({ ...defaultSettings })),
     }),
     {
-      name: "todo-settings-storage",
+      name: "todo-app-settings",
     }
   )
 );

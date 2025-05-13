@@ -1,4 +1,7 @@
-// Define a interface para um item de TODO
+// Define os tipos de prioridade disponíveis
+export type Priority = "baixa" | "média" | "alta";
+
+// Interface para um item de TODO
 export interface TodoItem {
   id: string;
   content: string;
@@ -6,16 +9,16 @@ export interface TodoItem {
     x: number;
     y: number;
   };
+  zIndex?: number;
   color: string;
   createdAt: number;
   lastUpdated?: number;
-  zIndex?: number;
-  priority?: "baixa" | "média" | "alta";
+  completed?: boolean;
+  priority?: Priority;
   category?: string;
+  tags?: string[];
+  // Outros campos possíveis: dueDate, assignee, etc.
 }
-
-// Define os tipos de prioridade disponíveis
-export type Priority = "baixa" | "média" | "alta";
 
 // Interface para o estado do store Zustand
 export interface TodoStore {
@@ -52,21 +55,4 @@ export interface ThemeStore {
   theme: "light" | "dark";
   toggleTheme: () => void;
   setTheme: (theme: "light" | "dark") => void;
-}
-
-// Interface para configurações do aplicativo
-export interface SettingsStore {
-  showCompletedTodos: boolean;
-  defaultCategory: string;
-  defaultPriority: Priority | null;
-  sortOrder: "createdAt" | "priority" | "category";
-  showTimestamps: boolean;
-  defaultView: "board" | "list";
-  // Ações
-  toggleShowCompletedTodos: () => void;
-  setDefaultCategory: (category: string) => void;
-  setDefaultPriority: (priority: Priority | null) => void;
-  setSortOrder: (order: "createdAt" | "priority" | "category") => void;
-  toggleShowTimestamps: () => void;
-  setDefaultView: (view: "board" | "list") => void;
 }
