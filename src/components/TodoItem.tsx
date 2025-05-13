@@ -22,6 +22,12 @@ import {
   ContextMenuSeparator,
   ContextMenuLabel,
 } from "@/components/ui/context-menu";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import { useSettingsStore } from "@/store/settingsStore";
 
 interface TodoItemProps {
   todo: TodoItemType;
@@ -48,6 +54,9 @@ export const TodoItem = ({ todo, className }: TodoItemProps) => {
     updateTodoCategory,
     categories,
   } = useTodoStore();
+
+  const { showTimestamps } = useSettingsStore();
+
   const [isEditing, setIsEditing] = useState(false);
   const [content, setContent] = useState(todo.content);
   const [isVisible, setIsVisible] = useState(false);
@@ -156,229 +165,317 @@ export const TodoItem = ({ todo, className }: TodoItemProps) => {
     updateTodoCategory(todo.id, category);
   };
 
+  // Formatação de data
+  const formatDate = (timestamp: number) => {
+    return new Date(timestamp).toLocaleString("pt-BR", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   return (
     <ContextMenu>
       <ContextMenuTrigger>
-        <Card
-          className={cn(
-            "absolute p-4 shadow-md cursor-move group",
-            isMobile
-              ? "min-w-[150px] max-w-[250px]"
-              : "min-w-[200px] max-w-[300px]",
-            "hover:shadow-lg transition-all duration-300",
-            "backdrop-blur-sm bg-opacity-90 border-t border-white/40",
-            "rounded-lg hover:scale-[1.01]",
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4",
-            className
-          )}
-          style={{
-            left: `${todo.position.x}px`,
-            top: `${todo.position.y}px`,
-            backgroundColor: todo.color,
-            zIndex: todo.zIndex || 1,
-            // Garantir que não haja inversão de texto
-            transform: "none",
-            direction: "ltr",
-            boxShadow:
-              "0 4px 15px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.05)",
-          }}
-          onClick={handleClick}
-          onDoubleClick={handleDoubleClick}
-          onTouchStart={handleTouchStart}
-        >
-          {/* Indicador visual no topo do card */}
-          <div className="absolute top-0 left-0 right-0 h-1 rounded-t-lg bg-black/10"></div>
-
-          {/* Badges de prioridade e categoria */}
-          <div className="flex items-center gap-1.5 mb-2">
-            {todo.priority && (
-              <Badge
-                variant="outline"
-                className={cn(
-                  "text-xs font-medium py-0 h-5",
-                  priorityColors[todo.priority]
-                )}
-              >
-                {todo.priority}
-              </Badge>
-            )}
-            {todo.category && (
-              <Badge
-                variant="secondary"
-                className="text-xs font-medium py-0 h-5 bg-black/10 hover:bg-black/15"
-              >
-                {todo.category}
-              </Badge>
-            )}
-          </div>
-
-          {/* Conteúdo */}
-          <div className="mb-3">
-            <div
-              ref={contentEditableRef}
-              contentEditable={isEditing}
-              suppressContentEditableWarning
+        <HoverCard openDelay={300} closeDelay={100}>
+          <HoverCardTrigger asChild>
+            <Card
               className={cn(
-                "outline-none break-words whitespace-pre-wrap min-h-[30px] text-slate-800",
-                isMobile ? "text-sm" : "text-base",
-                isEditing &&
-                  "border border-dashed border-slate-400 p-2 rounded-md bg-white/70",
-                !isEditing && "select-text cursor-text"
+                "absolute p-4 shadow-md cursor-move group",
+                isMobile
+                  ? "min-w-[150px] max-w-[250px]"
+                  : "min-w-[200px] max-w-[300px]",
+                "hover:shadow-lg transition-all duration-300",
+                "backdrop-blur-sm bg-opacity-90 border-t border-white/40",
+                "rounded-lg hover:scale-[1.01]",
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-4",
+                className
               )}
               style={{
-                // Garantir direção correta do texto
+                left: `${todo.position.x}px`,
+                top: `${todo.position.y}px`,
+                backgroundColor: todo.color,
+                zIndex: todo.zIndex || 1,
+                // Garantir que não haja inversão de texto
+                transform: "none",
                 direction: "ltr",
-                unicodeBidi: "normal",
+                boxShadow:
+                  "0 4px 15px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.05)",
               }}
-              onBlur={handleBlur}
-              onKeyDown={handleKeyDown}
-              onInput={handleContentChange}
+              onClick={handleClick}
+              onDoubleClick={handleDoubleClick}
+              onTouchStart={handleTouchStart}
             >
-              {content}
+              {/* Indicador visual no topo do card */}
+              <div className="absolute top-0 left-0 right-0 h-1 rounded-t-lg bg-black/10"></div>
+
+              {/* Badges de prioridade e categoria */}
+              <div className="flex items-center gap-1.5 mb-2">
+                {todo.priority && (
+                  <Badge
+                    variant="outline"
+                    className={cn(
+                      "text-xs font-medium py-0 h-5",
+                      priorityColors[todo.priority]
+                    )}
+                  >
+                    {todo.priority}
+                  </Badge>
+                )}
+                {todo.category && (
+                  <Badge
+                    variant="secondary"
+                    className="text-xs font-medium py-0 h-5 bg-black/10 hover:bg-black/15"
+                  >
+                    {todo.category}
+                  </Badge>
+                )}
+              </div>
+
+              {/* Conteúdo */}
+              <div className="mb-3">
+                <div
+                  ref={contentEditableRef}
+                  contentEditable={isEditing}
+                  suppressContentEditableWarning
+                  className={cn(
+                    "outline-none break-words whitespace-pre-wrap min-h-[30px] text-slate-800",
+                    isMobile ? "text-sm" : "text-base",
+                    isEditing &&
+                      "border border-dashed border-slate-400 p-2 rounded-md bg-white/70",
+                    !isEditing && "select-text cursor-text"
+                  )}
+                  style={{
+                    // Garantir direção correta do texto
+                    direction: "ltr",
+                    unicodeBidi: "normal",
+                  }}
+                  onBlur={handleBlur}
+                  onKeyDown={handleKeyDown}
+                  onInput={handleContentChange}
+                >
+                  {content}
+                </div>
+              </div>
+
+              {/* Barra de ferramentas (sempre visível em mobile, visível no hover em desktop) */}
+              <div
+                className={cn(
+                  "flex justify-end items-center gap-1 mt-2 transition-all bg-white/20 rounded-lg p-1",
+                  isMobile
+                    ? "opacity-100"
+                    : "opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0"
+                )}
+              >
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className={cn(
+                          "text-slate-600 hover:text-slate-900 rounded-full hover:bg-black/5",
+                          isMobile ? "h-8 w-8 p-0" : "h-7 w-7 p-0"
+                        )}
+                        onClick={(e) => {
+                          e.stopPropagation(); // Impedir propagação para o Card
+                          handleColorChange();
+                        }}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width={isMobile ? "14" : "16"}
+                          height={isMobile ? "14" : "16"}
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M12 8v4" />
+                          <path d="M12 16h.01" />
+                        </svg>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Mudar cor</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className={cn(
+                          "text-slate-600 hover:text-slate-900 rounded-full hover:bg-black/5",
+                          isMobile ? "h-8 w-8 p-0" : "h-7 w-7 p-0"
+                        )}
+                        onClick={(e) => {
+                          e.stopPropagation(); // Impedir propagação para o Card
+                          duplicateTodo(todo.id);
+                        }}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width={isMobile ? "14" : "16"}
+                          height={isMobile ? "14" : "16"}
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <rect x="8" y="8" width="12" height="12" rx="2" />
+                          <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" />
+                        </svg>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Duplicar</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className={cn(
+                          "text-slate-600 hover:text-slate-900 rounded-full hover:bg-black/5",
+                          isMobile ? "h-8 w-8 p-0" : "h-7 w-7 p-0"
+                        )}
+                        onClick={(e) => {
+                          e.stopPropagation(); // Impedir propagação para o Card
+                          removeTodo(todo.id);
+                        }}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width={isMobile ? "14" : "16"}
+                          height={isMobile ? "14" : "16"}
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M3 6h18" />
+                          <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                          <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                        </svg>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Remover</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+
+              {/* Tempo de criação e atualização */}
+              {showTimestamps && (
+                <div
+                  className={cn(
+                    "text-slate-600 opacity-60 mt-2",
+                    isMobile ? "text-[10px]" : "text-xs"
+                  )}
+                >
+                  {new Date(todo.createdAt).toLocaleString("pt-BR", {
+                    month: "short",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                  {todo.lastUpdated && todo.lastUpdated > todo.createdAt && (
+                    <span className="ml-1">• editado</span>
+                  )}
+                </div>
+              )}
+            </Card>
+          </HoverCardTrigger>
+          <HoverCardContent
+            className="w-80 backdrop-blur-sm bg-white/90 dark:bg-slate-800/90"
+            align="start"
+            sideOffset={10}
+          >
+            <div className="space-y-3">
+              <div className="space-y-1">
+                <h4 className="text-sm font-semibold">Detalhes do TODO</h4>
+                <div className="flex gap-1.5">
+                  {todo.priority && (
+                    <Badge
+                      variant="outline"
+                      className={cn(
+                        "text-xs font-medium",
+                        priorityColors[todo.priority]
+                      )}
+                    >
+                      Prioridade: {todo.priority}
+                    </Badge>
+                  )}
+                  {todo.category && (
+                    <Badge variant="secondary" className="text-xs font-medium">
+                      {todo.category}
+                    </Badge>
+                  )}
+                </div>
+              </div>
+
+              <div className="text-sm">
+                <div className="font-medium text-xs text-muted-foreground mb-1">
+                  Conteúdo
+                </div>
+                <p className="line-clamp-3 text-sm">{todo.content}</p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-1 text-xs text-muted-foreground">
+                <div>
+                  <div className="font-medium mb-1">Criado em</div>
+                  <p>{formatDate(todo.createdAt)}</p>
+                </div>
+
+                {todo.lastUpdated && todo.lastUpdated > todo.createdAt && (
+                  <div>
+                    <div className="font-medium mb-1">Última edição</div>
+                    <p>{formatDate(todo.lastUpdated)}</p>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex justify-end gap-1 mt-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="h-7 text-xs px-2 rounded-md"
+                  onClick={() => setIsEditing(true)}
+                >
+                  Editar
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="h-7 text-xs px-2 rounded-md text-red-600 hover:bg-red-50"
+                  onClick={() => removeTodo(todo.id)}
+                >
+                  Remover
+                </Button>
+              </div>
             </div>
-          </div>
-
-          {/* Barra de ferramentas (sempre visível em mobile, visível no hover em desktop) */}
-          <div
-            className={cn(
-              "flex justify-end items-center gap-1 mt-2 transition-all bg-white/20 rounded-lg p-1",
-              isMobile
-                ? "opacity-100"
-                : "opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0"
-            )}
-          >
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className={cn(
-                      "text-slate-600 hover:text-slate-900 rounded-full hover:bg-black/5",
-                      isMobile ? "h-8 w-8 p-0" : "h-7 w-7 p-0"
-                    )}
-                    onClick={(e) => {
-                      e.stopPropagation(); // Impedir propagação para o Card
-                      handleColorChange();
-                    }}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width={isMobile ? "14" : "16"}
-                      height={isMobile ? "14" : "16"}
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <circle cx="12" cy="12" r="10" />
-                      <path d="M12 8v4" />
-                      <path d="M12 16h.01" />
-                    </svg>
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Mudar cor</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className={cn(
-                      "text-slate-600 hover:text-slate-900 rounded-full hover:bg-black/5",
-                      isMobile ? "h-8 w-8 p-0" : "h-7 w-7 p-0"
-                    )}
-                    onClick={(e) => {
-                      e.stopPropagation(); // Impedir propagação para o Card
-                      duplicateTodo(todo.id);
-                    }}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width={isMobile ? "14" : "16"}
-                      height={isMobile ? "14" : "16"}
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <rect x="8" y="8" width="12" height="12" rx="2" />
-                      <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" />
-                    </svg>
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Duplicar</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className={cn(
-                      "text-slate-600 hover:text-slate-900 rounded-full hover:bg-black/5",
-                      isMobile ? "h-8 w-8 p-0" : "h-7 w-7 p-0"
-                    )}
-                    onClick={(e) => {
-                      e.stopPropagation(); // Impedir propagação para o Card
-                      removeTodo(todo.id);
-                    }}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width={isMobile ? "14" : "16"}
-                      height={isMobile ? "14" : "16"}
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M3 6h18" />
-                      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                    </svg>
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Remover</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-
-          {/* Tempo de criação e atualização */}
-          <div
-            className={cn(
-              "text-slate-600 opacity-60 mt-2",
-              isMobile ? "text-[10px]" : "text-xs"
-            )}
-          >
-            {new Date(todo.createdAt).toLocaleString("pt-BR", {
-              month: "short",
-              day: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-            {todo.lastUpdated && todo.lastUpdated > todo.createdAt && (
-              <span className="ml-1">• editado</span>
-            )}
-          </div>
-        </Card>
+          </HoverCardContent>
+        </HoverCard>
       </ContextMenuTrigger>
 
       <ContextMenuContent className="w-64">
