@@ -2,6 +2,7 @@ import { WhiteboardManager } from "@/components/WhiteboardManager";
 import { Toolbar } from "@/components/Toolbar";
 import { useThemeStore } from "@/store/themeStore";
 import { useEffect } from "react";
+import { CommandPalette } from "@/components/CommandPalette";
 import "./App.css";
 
 function App() {
@@ -56,6 +57,9 @@ function App() {
           </p>
         </div>
       </footer>
+
+      {/* Paleta de comandos global */}
+      <CommandPalette />
     </div>
   );
 }
