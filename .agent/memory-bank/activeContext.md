@@ -1,43 +1,45 @@
 # Contexto Ativo
 
 ## Foco Atual
-- Transformação do projeto em um aplicativo TODO com whiteboard interativo
-- Implementação de componentes shadcn/ui e gerenciamento de estado com Zustand
+- Desenvolvimento do Todo App com whiteboard interativo
+- Implementação do modelo de dados e estado com Zustand
 
 ## Estado do Projeto
 - Projeto inicializado com Vite, React, TypeScript e Tailwind CSS
-- Estrutura básica do projeto definida
-- Sistema de memória criado e documentação inicial estabelecida
+- Componentes shadcn/ui básicos configurados (Button, Card, Dialog, Input)
+- Zustand instalado e store básico criado
+- Estrutura de diretórios e arquivos organizada
+- Definição de tipos e interfaces criadas
+- Sistema GitFlow implementado com branches develop e feature
 
 ## Próximos Passos
-1. Implementar as tarefas definidas no board.md
-2. Seguir estratégia GitFlow para desenvolvimento das funcionalidades
-3. Criar componentes UI com shadcn/ui
-4. Implementar gerenciamento de estado com Zustand
-5. Desenvolver whiteboard responsivo com posicionamento livre para TODOs
+1. Mesclar o branch `feature/setup-environment` para `develop`
+2. Criar branch `feature/data-model` para a próxima tarefa
+3. Implementar o modelo de dados completo e funções do Zustand
+4. Desenvolver o componente Whiteboard para posicionamento livre
 
 ## Observações
-- O projeto segue abordagem de desenvolvimento incremental
-- Componentes UI devem seguir os padrões de shadcn/ui
-- Estado será gerenciado com Zustand para simplicidade e eficiência
-- TODOs terão cores pastéis aleatórias e posicionamento livre no whiteboard
+- A configuração do ambiente foi completada com sucesso
+- O padrão de cores pastéis foi implementado com função de geração automática
+- A biblioteca @dnd-kit foi instalada para arrastar e soltar os TODOs
+- O sistema de persistência com localStorage está configurado no Zustand
 
 ## Plano Confirmado
 Transformação em aplicativo TODO com whiteboard interativo:
 
 ### Estratégia GitFlow
-1. Criar branch `develop` a partir de `main` (se ainda não existir)
-2. Criar branch `feature/todo-whiteboard` para desenvolvimento das funcionalidades
-3. Ao finalizar, mesclar para `develop`
-4. Quando estável, criar branch `release/v1.0.0` para testes finais
-5. Após testes, mesclar para `main` e para `develop`
+1. ✅ Criar branch `develop` a partir de `main` (concluído)
+2. ✅ Criar branch `feature/setup-environment` para configuração inicial (concluído)
+3. ⏱️ Criar branches feature para cada tarefa conforme o board.md
+4. ⏱️ Quando estável, criar branch `release/v1.0.0` para testes finais
+5. ⏱️ Após testes, mesclar para `main` e para `develop`
 
 ### Implementação
-1. Configuração Inicial (shadcn/ui, Zustand)
-2. Desenvolvimento do Modelo de Dados (interfaces, store Zustand)
-3. Componentes UI (whiteboard, TODO items)
-4. Lógica de Negócios (adicionar, remover, mover TODOs)
-5. Testes e Refinamentos
-6. Documentação e Finalização
+1. ✅ Configuração Inicial (shadcn/ui, Zustand) (concluída)
+2. ⏱️ Desenvolvimento do Modelo de Dados (próxima tarefa)
+3. ⏱️ Componentes UI (whiteboard, TODO items)
+4. ⏱️ Lógica de Negócios (adicionar, remover, mover TODOs)
+5. ⏱️ Testes e Refinamentos
+6. ⏱️ Documentação e Finalização
 
-As tarefas detalhadas estão definidas no arquivo board.md. 
+As tarefas detalhadas continuam definidas no arquivo board.md, com a primeira tarefa concluída e documentada em .agent/task-logs/task-log_0003_setup_environment.md. 
