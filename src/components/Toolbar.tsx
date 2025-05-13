@@ -13,6 +13,7 @@ import { useTodoStore } from "@/store/todoStore";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { ToggleTheme } from "@/components/ui/toggle-theme";
+import { SettingsPanel } from "@/components/SettingsPanel";
 
 interface ToolbarProps {
   className?: string;
@@ -209,6 +210,9 @@ export const Toolbar = ({ className }: ToolbarProps) => {
       <div className="flex items-center gap-2 flex-wrap bg-slate-100 dark:bg-slate-700/50 rounded-full px-2 py-1 shadow-inner">
         {/* Toggle de tema */}
         <ToggleTheme className="rounded-full" />
+
+        {/* Painel de configurações */}
+        <SettingsPanel />
 
         {/* Botões de layout */}
         <Button

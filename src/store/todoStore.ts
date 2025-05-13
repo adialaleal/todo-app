@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage, PersistOptions } from "zustand/middleware";
-import { TodoItem, TodoStore, Priority } from "@/types";
+import { TodoItem, TodoStore, TodoEdge, Priority, NodeType } from "@/types";
 import { generateId, generatePastelColor } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -93,13 +93,16 @@ export const useTodoStore = create<TodoStore>()(
   persist(
     (set, get) => ({
       todos: [],
+      edges: [],
       categories: ["Trabalho", "Pessoal", "Estudo", "Compras"],
 
       // Ações básicas CRUD
-      addTodo: (content) =>
+      addTodo: (content, type = "default", parentNode, customPosition) =>
         set((state) => {
           try {
-            const position = getRandomPosition();
+            // Usar posição personalizada se fornecida, senão gerar aleatoriamente
+            const position = customPosition || getRandomPosition();
+
             const newTodo: TodoItem = {
               id: generateId(),
               content,
@@ -108,9 +111,19 @@ export const useTodoStore = create<TodoStore>()(
               createdAt: Date.now(),
               lastUpdated: Date.now(),
               zIndex: getMaxZIndex(state.todos),
+              type,
+              parentNode,
+              // Se for um nó filho em um grupo, adicionar extent
+              ...(parentNode ? { extent: "parent" } : {}),
               // Opcionalmente definir prioridade/categoria padrão
               priority: "média",
             };
+
+            // Sucesso ao adicionar
+            toast.success("Adicionado", {
+              description: "Novo todo criado com sucesso.",
+              duration: 2000,
+            });
 
             return { todos: [...state.todos, newTodo] };
           } catch (error) {
@@ -125,7 +138,27 @@ export const useTodoStore = create<TodoStore>()(
       removeTodo: (id) =>
         set((state) => {
           try {
-            return { todos: state.todos.filter((todo) => todo.id !== id) };
+            // Ao remover um todo, também remover todas as edges conectadas a ele
+            const newEdges = state.edges.filter(
+              (edge) => edge.source !== id && edge.target !== id
+            );
+
+            // Também remover quaisquer nós filhos se o nó for um grupo
+            const childrenIds = state.todos
+              .filter((todo) => todo.parentNode === id)
+              .map((todo) => todo.id);
+
+            const remainingTodos = state.todos.filter(
+              (todo) => todo.id !== id && !childrenIds.includes(todo.id)
+            );
+
+            // Notificar remoção
+            toast.info("Item removido", { duration: 2000 });
+
+            return {
+              todos: remainingTodos,
+              edges: newEdges,
+            };
           } catch (error) {
             console.error("Erro ao remover TODO:", error);
             toast.error("Erro ao remover TODO", {
@@ -178,6 +211,83 @@ export const useTodoStore = create<TodoStore>()(
           }
         }),
 
+      // Gestão de edges (conexões)
+      addEdge: (source, target, label) =>
+        set((state) => {
+          try {
+            // Verificar se já existe uma conexão igual
+            const edgeExists = state.edges.some(
+              (edge) => edge.source === source && edge.target === target
+            );
+
+            if (edgeExists) {
+              toast.info("Conexão existente", {
+                description: "Esta conexão já existe.",
+              });
+              return state;
+            }
+
+            // Verificar se não está tentando conectar a si mesmo
+            if (source === target) {
+              toast.warning("Operação inválida", {
+                description: "Não é possível conectar um nó a si mesmo.",
+              });
+              return state;
+            }
+
+            const newEdge: TodoEdge = {
+              id: `edge-${source}-${target}`,
+              source,
+              target,
+              label,
+              type: "default",
+              animated: false,
+            };
+
+            // Notificar sucesso
+            toast.success("Conexão criada", { duration: 2000 });
+
+            return {
+              edges: [...state.edges, newEdge],
+            };
+          } catch (error) {
+            console.error("Erro ao adicionar conexão:", error);
+            toast.error("Erro ao conectar", {
+              description: "Não foi possível criar a conexão entre os itens.",
+            });
+            return state;
+          }
+        }),
+
+      removeEdge: (id) =>
+        set((state) => {
+          try {
+            // Notificar remoção
+            toast.info("Conexão removida", { duration: 2000 });
+
+            return {
+              edges: state.edges.filter((edge) => edge.id !== id),
+            };
+          } catch (error) {
+            console.error("Erro ao remover conexão:", error);
+            return state;
+          }
+        }),
+
+      updateEdge: (id, data) =>
+        set((state) => {
+          try {
+            return {
+              edges: state.edges.map((edge) =>
+                edge.id === id ? { ...edge, ...data } : edge
+              ),
+            };
+          } catch (error) {
+            console.error("Erro ao atualizar conexão:", error);
+            return state;
+          }
+        }),
+
       // Novas funcionalidades
       updateTodoColor: (id, color) =>
         set((state) => {
@@ -195,6 +305,26 @@ export const useTodoStore = create<TodoStore>()(
             };
           } catch (error) {
             console.error("Erro ao atualizar cor:", error);
+            return state;
+          }
+        }),
+
+      updateTodoType: (id, type) =>
+        set((state) => {
+          try {
+            return {
+              todos: state.todos.map((todo) =>
+                todo.id === id
+                  ? {
+                      ...todo,
+                      type,
+                      lastUpdated: Date.now(),
+                    }
+                  : todo
+              ),
+            };
+          } catch (error) {
+            console.error("Erro ao atualizar tipo:", error);
             return state;
           }
         }),
@@ -229,9 +359,10 @@ export const useTodoStore = create<TodoStore>()(
             if (!todoToDuplicate) return state;
 
             // Cria uma cópia com novo ID e posição ligeiramente diferente
+            const newId = generateId();
             const newTodo: TodoItem = {
               ...todoToDuplicate,
-              id: generateId(),
+              id: newId,
               position: {
                 x: todoToDuplicate.position.x + 20,
                 y: todoToDuplicate.position.y + 20,
@@ -241,7 +372,26 @@ export const useTodoStore = create<TodoStore>()(
               zIndex: getMaxZIndex(state.todos),
             };
 
-            return { todos: [...state.todos, newTodo] };
+            // Se duplicar um nó de grupo, duplicar também seus filhos
+            const childrenToDuplicate =
+              todoToDuplicate.type === "group"
+                ? state.todos.filter((todo) => todo.parentNode === id)
+                : [];
+
+            const newChildren = childrenToDuplicate.map((child) => ({
+              ...child,
+              id: generateId(),
+              parentNode: newId,
+              createdAt: Date.now(),
+              lastUpdated: Date.now(),
+            }));
+
+            // Notificar sucesso
+            toast.success("Item duplicado", { duration: 2000 });
+
+            return {
+              todos: [...state.todos, newTodo, ...newChildren],
+            };
           } catch (error) {
             console.error("Erro ao duplicar TODO:", error);
             toast.error("Erro ao duplicar", {
@@ -420,6 +570,9 @@ export const useTodoStore = create<TodoStore>()(
               toast.info("Categoria já existe");
               return state;
             }
+
+            toast.success("Categoria adicionada", { duration: 2000 });
+
             return {
               categories: [...state.categories, name],
             };
