@@ -106,119 +106,127 @@ export const Toolbar = ({ className }: ToolbarProps) => {
   };
 
   return (
-    <div className={cn("flex items-center gap-2 p-2 bg-white border-b border-slate-200", className)}>
-      {/* Botão de adicionar TODO */}
-      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-        <DialogTrigger asChild>
-          <Button size="sm" className="bg-blue-500 hover:bg-blue-600">
-            + Adicionar TODO
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Adicionar novo TODO</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <Input
-              placeholder="Digite o conteúdo do TODO..."
-              value={newTodoContent}
-              onChange={(e) => setNewTodoContent(e.target.value)}
-              onKeyDown={handleKeyDown}
-              autoFocus
-            />
-          </div>
-          <DialogFooter>
-            <Button type="submit" onClick={handleAddTodo}>Adicionar</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+    <div className={cn("flex items-center gap-2 p-2 bg-white border-b border-slate-200 flex-wrap", className)}>
+      {/* Grupo de botões principais */}
+      <div className="flex items-center gap-2 mr-auto">
+        {/* Botão de adicionar TODO */}
+        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+          <DialogTrigger asChild>
+            <Button size="sm" className="bg-blue-500 hover:bg-blue-600">
+              <span className="hidden sm:inline">+ Adicionar TODO</span>
+              <span className="sm:hidden">+ TODO</span>
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Adicionar novo TODO</DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <Input
+                placeholder="Digite o conteúdo do TODO..."
+                value={newTodoContent}
+                onChange={(e) => setNewTodoContent(e.target.value)}
+                onKeyDown={handleKeyDown}
+                autoFocus
+              />
+            </div>
+            <DialogFooter>
+              <Button type="submit" onClick={handleAddTodo}>Adicionar</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
-      {/* Botão para limpar todos os TODOs */}
-      {todos.length > 0 && (
-        <Button size="sm" variant="outline" onClick={handleClearAll} className="text-red-500 hover:text-red-600">
-          Limpar ({todos.length})
+        {/* Botão para limpar todos os TODOs */}
+        {todos.length > 0 && (
+          <Button size="sm" variant="outline" onClick={handleClearAll} className="text-red-500 hover:text-red-600">
+            <span className="hidden sm:inline">Limpar ({todos.length})</span>
+            <span className="sm:hidden">Limpar</span>
+          </Button>
+        )}
+      </div>
+
+      {/* Divider */}
+      <div className="w-px h-6 bg-slate-200 mx-1 my-1 hidden sm:block"></div>
+
+      {/* Grupo de gerenciamento */}
+      <div className="flex items-center gap-2 flex-wrap">
+        {/* Botões de layout */}
+        <Button size="sm" variant="ghost" onClick={handleSaveLayout} title="Salvar layout atual" className="px-2 sm:px-3">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1 sm:mr-1">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+            <polyline points="17 21 17 13 7 13 7 21" />
+            <polyline points="7 3 7 8 15 8" />
+          </svg>
+          <span className="hidden sm:inline">Salvar</span>
         </Button>
-      )}
-      
-      {/* Divider */}
-      <div className="w-px h-6 bg-slate-200 mx-1"></div>
+        
+        <Button size="sm" variant="ghost" onClick={handleLoadLayout} title="Carregar layout salvo" className="px-2 sm:px-3">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1 sm:mr-1">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="17 8 12 3 7 8" />
+            <line x1="12" y1="3" x2="12" y2="15" />
+          </svg>
+          <span className="hidden sm:inline">Carregar</span>
+        </Button>
 
-      {/* Botões de layout */}
-      <Button size="sm" variant="ghost" onClick={handleSaveLayout} title="Salvar layout atual">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
-          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
-          <polyline points="17 21 17 13 7 13 7 21" />
-          <polyline points="7 3 7 8 15 8" />
-        </svg>
-        Salvar
-      </Button>
-      
-      <Button size="sm" variant="ghost" onClick={handleLoadLayout} title="Carregar layout salvo">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-          <polyline points="17 8 12 3 7 8" />
-          <line x1="12" y1="3" x2="12" y2="15" />
-        </svg>
-        Carregar
-      </Button>
+        {/* Divider */}
+        <div className="w-px h-6 bg-slate-200 mx-1 my-1 hidden sm:block"></div>
 
-      {/* Divider */}
-      <div className="w-px h-6 bg-slate-200 mx-1"></div>
+        {/* Botões de export/import */}
+        <Button size="sm" variant="ghost" onClick={handleExport} title="Exportar TODOs" className="px-2 sm:px-3">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1 sm:mr-1">
+            <circle cx="12" cy="12" r="10" />
+            <path d="m9 8 2 2 4-4" />
+          </svg>
+          <span className="hidden sm:inline">Exportar</span>
+        </Button>
 
-      {/* Botões de export/import */}
-      <Button size="sm" variant="ghost" onClick={handleExport} title="Exportar TODOs">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
-          <circle cx="12" cy="12" r="10" />
-          <path d="m9 8 2 2 4-4" />
-        </svg>
-        Exportar
-      </Button>
+        <Dialog open={isExportDialogOpen} onOpenChange={setIsExportDialogOpen}>
+          <DialogContent className="sm:max-w-[425px] max-w-[95vw]">
+            <DialogHeader>
+              <DialogTitle>Exportar TODOs</DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <p className="text-sm text-slate-500">Copie os dados abaixo para salvar seus TODOs:</p>
+              <textarea 
+                className="w-full h-32 p-2 border rounded font-mono text-xs" 
+                value={exportData} 
+                readOnly
+                onClick={(e) => (e.target as HTMLTextAreaElement).select()}
+              />
+            </div>
+          </DialogContent>
+        </Dialog>
 
-      <Dialog open={isExportDialogOpen} onOpenChange={setIsExportDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Exportar TODOs</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <p className="text-sm text-slate-500">Copie os dados abaixo para salvar seus TODOs:</p>
-            <textarea 
-              className="w-full h-32 p-2 border rounded font-mono text-xs" 
-              value={exportData} 
-              readOnly
-              onClick={(e) => (e.target as HTMLTextAreaElement).select()}
-            />
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={isImportDialogOpen} onOpenChange={setIsImportDialogOpen}>
-        <DialogTrigger asChild>
-          <Button size="sm" variant="ghost" title="Importar TODOs">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-            Importar
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Importar TODOs</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <p className="text-sm text-slate-500">Cole os dados exportados anteriormente:</p>
-            <textarea 
-              className="w-full h-32 p-2 border rounded font-mono text-xs" 
-              value={importData} 
-              onChange={(e) => setImportData(e.target.value)}
-            />
-          </div>
-          <DialogFooter>
-            <Button type="submit" onClick={handleImport}>Importar</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+        <Dialog open={isImportDialogOpen} onOpenChange={setIsImportDialogOpen}>
+          <DialogTrigger asChild>
+            <Button size="sm" variant="ghost" title="Importar TODOs" className="px-2 sm:px-3">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1 sm:mr-1">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              <span className="hidden sm:inline">Importar</span>
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px] max-w-[95vw]">
+            <DialogHeader>
+              <DialogTitle>Importar TODOs</DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <p className="text-sm text-slate-500">Cole os dados exportados anteriormente:</p>
+              <textarea 
+                className="w-full h-32 p-2 border rounded font-mono text-xs" 
+                value={importData} 
+                onChange={(e) => setImportData(e.target.value)}
+              />
+            </div>
+            <DialogFooter>
+              <Button type="submit" onClick={handleImport}>Importar</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
     </div>
   );
 }; 
