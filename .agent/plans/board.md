@@ -56,25 +56,25 @@ Todas as tarefas seguirão o seguinte fluxo:
 
 ---
 
-### 3️⃣ Componente Whiteboard
+### ✅ 3️⃣ Componente Whiteboard
 **Branch**: `feature/whiteboard`
 
 **Descrição**: Desenvolver o componente de whiteboard com posicionamento livre.
 
 **Checklist**:
-- [ ] Criar componente base do whiteboard responsivo
-- [ ] Implementar sistema de grid ou posicionamento absoluto
-- [ ] Adicionar detecção de limites do whiteboard
-- [ ] Implementar responsividade para diferentes tamanhos de tela
-- [ ] Criar sistema de zoom/pan (opcional)
-- [ ] Implementar backdrop ou grade visual (opcional)
-- [ ] Conectar com o store Zustand
+- [x] Criar componente base do whiteboard responsivo
+- [x] Implementar sistema de grid ou posicionamento absoluto
+- [x] Adicionar detecção de limites do whiteboard
+- [x] Implementar responsividade para diferentes tamanhos de tela
+- [x] Criar sistema de zoom/pan (opcional)
+- [x] Implementar backdrop ou grade visual (opcional)
+- [x] Conectar com o store Zustand
 
 **Dependências**: Tarefa 2
 
 **Tasklog**: `.agent/task-logs/task-log_0005_whiteboard.md`
 
-**Status**: Pendente 🔄
+**Status**: Concluído ✓
 
 ---
 
@@ -97,7 +97,7 @@ Todas as tarefas seguirão o seguinte fluxo:
 
 **Tasklog**: `.agent/task-logs/task-log_0006_todo_item.md`
 
-**Status**: Pendente
+**Status**: Pendente 🔄
 
 ---
 
@@ -207,4 +207,5 @@ A cada conclusão de tarefa, um tasklog detalhado deve ser criado para registrar
 ## Progresso Atual
 - ✅ Ambiente configurado com shadcn/ui, Zustand e estrutura de diretórios base
 - ✅ Modelo de dados e store Zustand implementados com funcionalidades avançadas
-- 🔄 Próximo passo: Desenvolvimento do componente Whiteboard 
+- ✅ Componente Whiteboard responsivo com sistema de limites funcionando
+- 🔄 Próximo passo: Desenvolvimento do componente TodoItem com arrastar e soltar 
