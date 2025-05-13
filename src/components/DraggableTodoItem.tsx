@@ -22,6 +22,7 @@ export const DraggableTodoItem = ({ todo, className }: DraggableTodoItemProps) =
   });
 
   // Aplicar transformação apenas durante o arrasto, caso contrário usar posição absoluta do TODO
+  // A transformação afeta apenas a posição, não o conteúdo
   const style = isDragging
     ? {
         transform: CSS.Transform.toString(transform),
@@ -30,7 +31,9 @@ export const DraggableTodoItem = ({ todo, className }: DraggableTodoItemProps) =
         boxShadow: '0 8px 20px rgba(0, 0, 0, 0.15)'
       }
     : {
-        transform: CSS.Transform.toString({ x: 0, y: 0, scaleX: 1, scaleY: 1 })
+        // Não aplicar nenhuma transformação quando não estiver arrastando
+        // para evitar problemas com o texto invertido
+        zIndex: todo.zIndex || 1
       };
 
   return (

@@ -52,7 +52,15 @@ export const WhiteboardDropArea = ({ parentRef }: WhiteboardDropAreaProps) => {
 
   return (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-      <div ref={dropAreaRef} className="absolute inset-0">
+      <div 
+        ref={dropAreaRef} 
+        className="absolute inset-0"
+        style={{ 
+          // Garantir que não haja transformações que afetem o texto
+          transformStyle: 'preserve-3d',
+          backfaceVisibility: 'hidden'
+        }}
+      >
         {/* Renderizar todos os TODOs como itens arrastáveis */}
         {todos.map((todo) => (
           <DraggableTodoItem key={todo.id} todo={todo} />

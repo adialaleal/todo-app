@@ -100,6 +100,9 @@ export const TodoItem = ({ todo, className }: TodoItemProps) => {
         top: `${todo.position.y}px`,
         backgroundColor: todo.color,
         zIndex: todo.zIndex || 1,
+        // Garantir que não haja inversão de texto
+        transform: 'none',
+        direction: 'ltr'
       }}
       onClick={handleClick}
       onDoubleClick={handleDoubleClick}
@@ -115,6 +118,11 @@ export const TodoItem = ({ todo, className }: TodoItemProps) => {
             isEditing && "border border-dashed border-slate-400 p-1 rounded bg-white/50",
             !isEditing && "select-text cursor-text"
           )}
+          style={{
+            // Garantir direção correta do texto
+            direction: 'ltr',
+            unicodeBidi: 'normal'
+          }}
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
           onInput={handleContentChange}
