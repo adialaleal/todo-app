@@ -35,41 +35,53 @@ export const Whiteboard = ({ className }: WhiteboardProps) => {
     <div
       ref={boardRef}
       className={cn(
-        "relative w-full bg-slate-50 dark:bg-slate-800 overflow-hidden border border-slate-200 dark:border-slate-700 rounded-lg shadow-sm",
+        "relative w-full overflow-hidden rounded-xl shadow-inner",
         "h-[calc(100vh-8rem)] md:h-[calc(100vh-7rem)]", // Altura ajustada para diferentes tamanhos de tela
+        "bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900",
+        "border border-slate-200 dark:border-slate-700",
         className
       )}
     >
-      {/* Grade visual de fundo (opcional) - apenas em desktop */}
-      {!isMobile && (
-        <div className="absolute inset-0 grid grid-cols-[repeat(20,1fr)] grid-rows-[repeat(20,1fr)] opacity-10 pointer-events-none">
-          {Array.from({ length: 400 }).map((_, index) => (
-            <div
-              key={index}
-              className="border border-slate-400 dark:border-slate-500"
-            />
-          ))}
-        </div>
-      )}
+      {/* Padrão de fundo estilo dot-grid */}
+      <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#4b5563_1px,transparent_1px)] [background-size:16px_16px] opacity-50"></div>
 
       {/* Área de drop com TODOs */}
       <WhiteboardDropArea parentRef={boardRef} />
 
       {/* Mensagem quando não há TODOs */}
       {todos.length === 0 && (
-        <div className="absolute inset-0 flex items-center justify-center text-slate-400 dark:text-slate-500 text-center px-4">
-          <p>
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 text-center px-4">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="48"
+            height="48"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="mb-4 opacity-40"
+          >
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <path d="M9 14h6" />
+            <path d="M12 11v6" />
+          </svg>
+          <p className="text-lg font-medium">
             {isMobile
               ? "Toque no botão + para adicionar TODOs"
-              : "Adicione TODOs usando a barra de ferramentas"}
+              : "Quadro vazio"}
+          </p>
+          <p className="text-sm opacity-70 mt-1">
+            Adicione TODOs usando a barra de ferramentas acima
           </p>
         </div>
       )}
 
-      {/* Informação de depuração - pode ser removida na versão final */}
-      <div className="absolute bottom-2 right-2 text-xs text-slate-400 dark:text-slate-500 pointer-events-none hidden md:block">
-        Dimensões: {dimensions.width}x{dimensions.height} | TODOs:{" "}
-        {todos.length}
+      {/* Informação de depuração - com design melhorado */}
+      <div className="absolute bottom-3 right-3 text-xs bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-300 px-2 py-1 rounded-full shadow-sm opacity-70 hover:opacity-100 transition-opacity pointer-events-none hidden md:block">
+        {dimensions.width}×{dimensions.height} | {todos.length}{" "}
+        {todos.length === 1 ? "TODO" : "TODOs"}
       </div>
     </div>
   );

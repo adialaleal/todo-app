@@ -1,9 +1,9 @@
-import { useState, useRef, useEffect } from 'react';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { TodoItem as TodoItemType } from '@/types';
-import { useTodoStore } from '@/store/todoStore';
-import { cn, generatePastelColor } from '@/lib/utils';
+import { useState, useRef, useEffect } from "react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { TodoItem as TodoItemType } from "@/types";
+import { useTodoStore } from "@/store/todoStore";
+import { cn, generatePastelColor } from "@/lib/utils";
 
 interface TodoItemProps {
   todo: TodoItemType;
@@ -11,7 +11,13 @@ interface TodoItemProps {
 }
 
 export const TodoItem = ({ todo, className }: TodoItemProps) => {
-  const { updateTodoContent, removeTodo, duplicateTodo, bringToFront, updateTodoColor } = useTodoStore();
+  const {
+    updateTodoContent,
+    removeTodo,
+    duplicateTodo,
+    bringToFront,
+    updateTodoColor,
+  } = useTodoStore();
   const [isEditing, setIsEditing] = useState(false);
   const [content, setContent] = useState(todo.content);
   const [isVisible, setIsVisible] = useState(false);
@@ -23,10 +29,10 @@ export const TodoItem = ({ todo, className }: TodoItemProps) => {
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     checkIfMobile();
-    window.addEventListener('resize', checkIfMobile);
-    return () => window.removeEventListener('resize', checkIfMobile);
+    window.addEventListener("resize", checkIfMobile);
+    return () => window.removeEventListener("resize", checkIfMobile);
   }, []);
 
   // Animação de entrada quando o componente monta
@@ -35,7 +41,7 @@ export const TodoItem = ({ todo, className }: TodoItemProps) => {
     const timer = setTimeout(() => {
       setIsVisible(true);
     }, 50);
-    
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -43,7 +49,7 @@ export const TodoItem = ({ todo, className }: TodoItemProps) => {
   useEffect(() => {
     if (isEditing && contentEditableRef.current) {
       contentEditableRef.current.focus();
-      
+
       // Posicionar o cursor no final do texto
       const range = document.createRange();
       const selection = window.getSelection();
@@ -72,7 +78,7 @@ export const TodoItem = ({ todo, className }: TodoItemProps) => {
         setIsEditing(true);
         bringToFront(todo.id);
       }, 500); // 500ms para considerar como toque longo
-      
+
       return () => clearTimeout(timer);
     }
   };
@@ -89,10 +95,10 @@ export const TodoItem = ({ todo, className }: TodoItemProps) => {
 
   // Eventos de teclado para salvar com Enter ou cancelar com Escape
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleBlur();
-    } else if (e.key === 'Escape') {
+    } else if (e.key === "Escape") {
       setIsEditing(false);
       setContent(todo.content);
     }
@@ -114,9 +120,13 @@ export const TodoItem = ({ todo, className }: TodoItemProps) => {
   return (
     <Card
       className={cn(
-        "absolute p-3 shadow-md cursor-move group",
-        isMobile ? "min-w-[150px] max-w-[250px]" : "min-w-[200px] max-w-[300px]",
+        "absolute p-4 shadow-md cursor-move group",
+        isMobile
+          ? "min-w-[150px] max-w-[250px]"
+          : "min-w-[200px] max-w-[300px]",
         "hover:shadow-lg transition-all duration-300",
+        "backdrop-blur-sm bg-opacity-90 border-t border-white/40",
+        "rounded-lg hover:scale-[1.01]",
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4",
         className
       )}
@@ -126,15 +136,20 @@ export const TodoItem = ({ todo, className }: TodoItemProps) => {
         backgroundColor: todo.color,
         zIndex: todo.zIndex || 1,
         // Garantir que não haja inversão de texto
-        transform: 'none',
-        direction: 'ltr'
+        transform: "none",
+        direction: "ltr",
+        boxShadow:
+          "0 4px 15px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.05)",
       }}
       onClick={handleClick}
       onDoubleClick={handleDoubleClick}
       onTouchStart={handleTouchStart}
     >
+      {/* Indicador visual no topo do card */}
+      <div className="absolute top-0 left-0 right-0 h-1 rounded-t-lg bg-black/10"></div>
+
       {/* Conteúdo */}
-      <div className="mb-2">
+      <div className="mb-3">
         <div
           ref={contentEditableRef}
           contentEditable={isEditing}
@@ -142,13 +157,14 @@ export const TodoItem = ({ todo, className }: TodoItemProps) => {
           className={cn(
             "outline-none break-words whitespace-pre-wrap min-h-[30px] text-slate-800",
             isMobile ? "text-sm" : "text-base",
-            isEditing && "border border-dashed border-slate-400 p-1 rounded bg-white/50",
+            isEditing &&
+              "border border-dashed border-slate-400 p-2 rounded-md bg-white/70",
             !isEditing && "select-text cursor-text"
           )}
           style={{
             // Garantir direção correta do texto
-            direction: 'ltr',
-            unicodeBidi: 'normal'
+            direction: "ltr",
+            unicodeBidi: "normal",
           }}
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
@@ -159,16 +175,20 @@ export const TodoItem = ({ todo, className }: TodoItemProps) => {
       </div>
 
       {/* Barra de ferramentas (sempre visível em mobile, visível no hover em desktop) */}
-      <div className={cn(
-        "flex justify-end items-center mt-2 transition-opacity",
-        isMobile ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-      )}>
+      <div
+        className={cn(
+          "flex justify-end items-center gap-1 mt-2 transition-all bg-white/20 rounded-lg p-1",
+          isMobile
+            ? "opacity-100"
+            : "opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0"
+        )}
+      >
         <Button
           size="sm"
           variant="ghost"
           className={cn(
-            "text-slate-600 hover:text-slate-900",
-            isMobile ? "h-7 w-7 p-0" : "h-6 w-6 p-0"
+            "text-slate-600 hover:text-slate-900 rounded-full hover:bg-black/5",
+            isMobile ? "h-8 w-8 p-0" : "h-7 w-7 p-0"
           )}
           onClick={(e) => {
             e.stopPropagation(); // Impedir propagação para o Card
@@ -176,9 +196,20 @@ export const TodoItem = ({ todo, className }: TodoItemProps) => {
           }}
           title="Mudar cor"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width={isMobile ? "14" : "16"} height={isMobile ? "14" : "16"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={isMobile ? "14" : "16"}
+            height={isMobile ? "14" : "16"}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <circle cx="12" cy="12" r="10" />
-            <path d="m8 12 2 2 4-4" />
+            <path d="M12 8v4" />
+            <path d="M12 16h.01" />
           </svg>
         </Button>
 
@@ -186,8 +217,8 @@ export const TodoItem = ({ todo, className }: TodoItemProps) => {
           size="sm"
           variant="ghost"
           className={cn(
-            "text-slate-600 hover:text-slate-900",
-            isMobile ? "h-7 w-7 p-0" : "h-6 w-6 p-0"
+            "text-slate-600 hover:text-slate-900 rounded-full hover:bg-black/5",
+            isMobile ? "h-8 w-8 p-0" : "h-7 w-7 p-0"
           )}
           onClick={(e) => {
             e.stopPropagation(); // Impedir propagação para o Card
@@ -195,37 +226,28 @@ export const TodoItem = ({ todo, className }: TodoItemProps) => {
           }}
           title="Duplicar"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width={isMobile ? "14" : "16"} height={isMobile ? "14" : "16"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={isMobile ? "14" : "16"}
+            height={isMobile ? "14" : "16"}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <rect x="8" y="8" width="12" height="12" rx="2" />
             <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" />
           </svg>
         </Button>
-        
+
         <Button
           size="sm"
           variant="ghost"
           className={cn(
-            "text-slate-600 hover:text-slate-900",
-            isMobile ? "h-7 w-7 p-0" : "h-6 w-6 p-0"
-          )}
-          onClick={(e) => {
-            e.stopPropagation(); // Impedir propagação para o Card
-            setIsEditing(true);
-          }}
-          title="Editar"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width={isMobile ? "14" : "16"} height={isMobile ? "14" : "16"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-            <path d="m15 5 4 4" />
-          </svg>
-        </Button>
-        
-        <Button
-          size="sm"
-          variant="ghost"
-          className={cn(
-            "text-slate-600 hover:text-red-600",
-            isMobile ? "h-7 w-7 p-0" : "h-6 w-6 p-0"
+            "text-slate-600 hover:text-slate-900 rounded-full hover:bg-black/5",
+            isMobile ? "h-8 w-8 p-0" : "h-7 w-7 p-0"
           )}
           onClick={(e) => {
             e.stopPropagation(); // Impedir propagação para o Card
@@ -233,7 +255,17 @@ export const TodoItem = ({ todo, className }: TodoItemProps) => {
           }}
           title="Remover"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width={isMobile ? "14" : "16"} height={isMobile ? "14" : "16"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={isMobile ? "14" : "16"}
+            height={isMobile ? "14" : "16"}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <path d="M3 6h18" />
             <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
             <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
@@ -242,22 +274,22 @@ export const TodoItem = ({ todo, className }: TodoItemProps) => {
       </div>
 
       {/* Tempo de criação e atualização */}
-      <div className={cn(
-        "text-slate-600 opacity-60 mt-2",
-        isMobile ? "text-[10px]" : "text-xs"
-      )}>
-        {new Date(todo.createdAt).toLocaleString('pt-BR', { 
-          month: 'short', 
-          day: 'numeric', 
-          hour: '2-digit', 
-          minute: '2-digit' 
+      <div
+        className={cn(
+          "text-slate-600 opacity-60 mt-2",
+          isMobile ? "text-[10px]" : "text-xs"
+        )}
+      >
+        {new Date(todo.createdAt).toLocaleString("pt-BR", {
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
         })}
         {todo.lastUpdated && todo.lastUpdated > todo.createdAt && (
-          <span className="ml-1">
-            • editado
-          </span>
+          <span className="ml-1">• editado</span>
         )}
       </div>
     </Card>
   );
-}; 
+};

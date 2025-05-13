@@ -3,7 +3,7 @@
 ## Visão Geral do Progresso
 - [x] Inicialização do Memory Bank (data: atual)
 - [x] Análise completa da estrutura do projeto
-- [ ] Implementação de funcionalidade de tema claro/escuro
+- [x] Implementação de funcionalidade de tema claro/escuro
 - [ ] Implementação de componentes básicos de UI
 - [ ] Implementação de funcionalidade de adição de tarefas
 - [ ] Implementação de funcionalidade de marcação como concluída
@@ -21,20 +21,22 @@
 |------------|----------------------------|-----------------------------------------------------|
 | Data atual | Inicialização do projeto   | Configuração do Memory Bank e análise inicial       |
 | Data atual | Planejamento de tema       | Plano detalhado para implementação de tema claro/escuro |
+| Data atual | Implementação de tema      | Funcionalidade de alternância de tema claro/escuro implementada |
 
 ## Funcionalidades Implementadas
-Nenhuma funcionalidade totalmente implementada ainda.
+- **Tema Claro/Escuro**: Funcionalidade completa para alternância entre temas claro e escuro, com persistência das preferências do usuário e detecção de preferência do sistema.
 
 ## Funcionalidades em Desenvolvimento
-- **Tema Claro/Escuro**: Planejamento completo para implementação de alternância de temas, incluindo persistência das preferências do usuário.
+Nenhuma funcionalidade em desenvolvimento ativo no momento.
 
-## Desafios Encontrados
-Nenhum desafio significativo encontrado ainda.
+## Desafios Encontrados e Soluções
+- **Flash de tema incorreto**: Solucionado com a aplicação do tema antes da renderização do React através de script no main.tsx.
+- **Compatibilidade com componentes existentes**: Resolvido através de uma abordagem sistemática de adição de classes dark para cada componente relevante.
 
 ## Próximos Marcos
 | Prioridade | Marco                              | Estimativa de Conclusão |
 |------------|------------------------------------|-----------------------|
-| Alta       | Implementação de tema claro/escuro | Em planejamento       |
+| Alta       | Refinamento do tema claro/escuro   | Pendente              |
 | Alta       | Estrutura básica do aplicativo     | Pendente              |
 | Alta       | Componentes de UI essenciais       | Pendente              |
 | Alta       | Funcionalidades CRUD para tarefas  | Pendente              |
